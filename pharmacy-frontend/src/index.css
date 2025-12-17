@@ -186,22 +186,22 @@ input:focus, textarea:focus, select:focus {
 }
 
 .btn-primary {
-  background-color: var(--primary-color);
+  background-color: #1FA89A;
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #1a9184;
 }
 
 .btn-secondary {
   background-color: white;
-  color: var(--primary-color);
-  border-color: var(--primary-color);
+  color: #2BBBAD;
+  border-color: #2BBBAD;
 }
 
 .btn-secondary:hover {
-  background-color: var(--primary-color);
+  background-color: #2BBBAD;
   color: white;
 }
 

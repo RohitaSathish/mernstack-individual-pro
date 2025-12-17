@@ -45,150 +45,174 @@ function Admin() {
   };
 
   return (
-    <div className="container">
-      <h2>Admin Dashboard</h2>
+    <div style={{ minHeight: '80vh', background: 'linear-gradient(135deg, #E0F7FA, #E3F2FD)', padding: '2em' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em', textAlign: 'center' }}>
+          <h2 style={{ color: '#2BBBAD', fontSize: '2.5em', marginBottom: '0.5em' }}>⚙️ Admin Dashboard</h2>
+          <p style={{ color: '#666' }}>Manage medicines and users</p>
+        </div>
 
-      <div className="admin-section">
-        <h3>{editingId ? "Edit Medicine" : "Add New Medicine"}</h3>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Medicine Name"
-            value={newMedicine.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="dosage"
-            placeholder="Dosage"
-            value={newMedicine.dosage}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="brand"
-            placeholder="Brand"
-            value={newMedicine.brand}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="price"
-            placeholder="Price (₹)"
-            value={newMedicine.price}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            step="0.1"
-            name="rating"
-            placeholder="Rating"
-            value={newMedicine.rating}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="purpose"
-            placeholder="Purpose"
-            value={newMedicine.purpose}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="url"
-            name="image"
-            placeholder="Image URL"
-            value={newMedicine.image}
-            onChange={handleChange}
-            required
-          />
-          <button type="submit">{editingId ? "Update Medicine" : "Add Medicine"}</button>
-          {editingId && <button type="button" onClick={() => { setEditingId(null); setNewMedicine({ name: "", dosage: "", brand: "", price: "", rating: "", purpose: "", image: "" }); }}>Cancel</button>}
-        </form>
-      </div>
+        <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
+          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>
+            {editingId ? "✏️ Edit Medicine" : "➕ Add New Medicine"}
+          </h3>
+          <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1em' }}>
+            <input
+              type="text"
+              name="name"
+              placeholder="Medicine Name"
+              value={newMedicine.name}
+              onChange={handleChange}
+              required
+              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+            />
+            <input
+              type="text"
+              name="dosage"
+              placeholder="Dosage"
+              value={newMedicine.dosage}
+              onChange={handleChange}
+              required
+              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+            />
+            <input
+              type="text"
+              name="brand"
+              placeholder="Brand"
+              value={newMedicine.brand}
+              onChange={handleChange}
+              required
+              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+            />
+            <input
+              type="number"
+              name="price"
+              placeholder="Price (₹)"
+              value={newMedicine.price}
+              onChange={handleChange}
+              required
+              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+            />
+            <input
+              type="number"
+              step="0.1"
+              name="rating"
+              placeholder="Rating"
+              value={newMedicine.rating}
+              onChange={handleChange}
+              required
+              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+            />
+            <input
+              type="text"
+              name="purpose"
+              placeholder="Purpose"
+              value={newMedicine.purpose}
+              onChange={handleChange}
+              required
+              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em', gridColumn: 'span 2' }}
+            />
+            <input
+              type="url"
+              name="image"
+              placeholder="Image URL"
+              value={newMedicine.image}
+              onChange={handleChange}
+              required
+              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em', gridColumn: 'span 2' }}
+            />
+            <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1em' }}>
+              <button type="submit" style={{ flex: 1, padding: '14px', backgroundColor: '#1FA89A', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1em', fontWeight: '600', cursor: 'pointer' }}>
+                {editingId ? "Update Medicine" : "Add Medicine"}
+              </button>
+              {editingId && (
+                <button type="button" onClick={() => { setEditingId(null); setNewMedicine({ name: "", dosage: "", brand: "", price: "", rating: "", purpose: "", image: "" }); }} style={{ padding: '14px 30px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1em', fontWeight: '600', cursor: 'pointer' }}>
+                  Cancel
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
 
-      <div className="admin-section">
-        <h3>Manage Medicines</h3>
-        <input
-          type="text"
-          placeholder="Search medicines..."
-          value={searchTerm}
-          onChange={(e) => {
-            const term = e.target.value;
-            setSearchTerm(term);
-            if (term.trim()) {
-              const results = medicines.filter(med => 
-                med.name.toLowerCase().includes(term.toLowerCase()) ||
-                med.brand.toLowerCase().includes(term.toLowerCase()) ||
-                med.purpose.toLowerCase().includes(term.toLowerCase())
-              );
-              setSearchResults(results);
-            } else {
-              setSearchResults([]);
-            }
-          }}
-          style={{ marginBottom: '1em', width: '100%', padding: '0.5em' }}
-        />
-        {searchResults.length > 0 && (
-          <div className="medicine-list">
-            {searchResults.map((med) => (
-              <div key={med.id} className="medicine-card">
-                <img src={med.image} alt={med.name} style={{ width: '120px', height: '120px', objectFit: 'cover', borderRadius: '8px', margin: '0 auto 1em auto', display: 'block' }} />
-                <h3>{med.name} <span style={{ fontSize: '0.8em', color: 'var(--secondary-color)', fontWeight: 'normal' }}>({med.dosage})</span></h3>
-                <p style={{ fontSize: '0.9em', color: 'var(--secondary-color)', marginBottom: '0.5em' }}>Brand: {med.brand}</p>
-                <div style={{ textAlign: 'center', marginBottom: '0.5em' }}>
-                  <p style={{ fontSize: '1.2em', fontWeight: 'bold', color: 'var(--primary-color)', margin: '0.5em 0' }}>₹ {med.price}</p>
-                  <p style={{ color: '#ffa500', margin: '0.5em 0' }}>★ {med.rating}/5</p>
-                </div>
-                <div style={{ marginBottom: '1em', textAlign: 'left' }}>
-                  <p><strong>Purpose:</strong> {med.purpose}</p>
-                </div>
-                <button onClick={() => handleEdit(med)} style={{ backgroundColor: '#28a745', borderColor: '#28a745', marginRight: '0.5em' }}>Edit</button>
-                <button onClick={() => handleDelete(med.id)} style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}>Delete</button>
-              </div>
-            ))}
+        <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
+          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>📦 Manage Medicines</h3>
+          <div style={{ maxWidth: '600px', margin: '0 auto 1.5em auto' }}>
+            <input
+              type="text"
+              placeholder="🔍 Search medicines..."
+              value={searchTerm}
+              onChange={(e) => {
+                const term = e.target.value;
+                setSearchTerm(term);
+                if (term.trim()) {
+                  const results = medicines.filter(med => 
+                    med.name.toLowerCase().includes(term.toLowerCase()) ||
+                    med.brand.toLowerCase().includes(term.toLowerCase()) ||
+                    med.purpose.toLowerCase().includes(term.toLowerCase())
+                  );
+                  setSearchResults(results);
+                } else {
+                  setSearchResults([]);
+                }
+              }}
+              style={{ width: '100%', padding: '12px 20px', border: '2px solid #e0e0e0', borderRadius: '50px', fontSize: '1em', transition: 'border 0.3s' }}
+              onFocus={(e) => e.target.style.borderColor = '#2BBBAD'}
+              onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
+            />
           </div>
-        )}
-        {searchTerm && searchResults.length === 0 && (
-          <p>No medicines found matching your search.</p>
-        )}
-      </div>
+          {searchResults.length > 0 && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5em' }}>
+              {searchResults.map((med) => (
+                <div key={med.id} style={{ backgroundColor: '#f8f9fa', borderRadius: '12px', padding: '1.5em', border: '2px solid #e0e0e0', transition: 'all 0.3s' }}>
+                  <img src={med.image} alt={med.name} style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1em' }} />
+                  <h4 style={{ color: '#333', fontSize: '1.2em', marginBottom: '0.5em' }}>{med.name}</h4>
+                  <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '0.3em' }}>{med.dosage} - {med.brand}</p>
+                  <p style={{ color: '#2BBBAD', fontWeight: '700', fontSize: '1.3em', margin: '0.5em 0' }}>₹ {med.price}</p>
+                  <p style={{ color: '#ffa500', marginBottom: '0.5em' }}>⭐ {med.rating}/5</p>
+                  <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '1em' }}>{med.purpose}</p>
+                  <div style={{ display: 'flex', gap: '0.5em' }}>
+                    <button onClick={() => handleEdit(med)} style={{ flex: 1, padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Edit</button>
+                    <button onClick={() => handleDelete(med.id)} style={{ flex: 1, padding: '10px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Delete</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          {searchTerm && searchResults.length === 0 && (
+            <p style={{ textAlign: 'center', color: '#999', padding: '2em' }}>No medicines found matching your search.</p>
+          )}
+        </div>
 
-      <div className="admin-section">
-        <h3>User Management</h3>
-        <p>Total Registered Users: {users.length}</p>
-        {users.length > 0 ? (
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1em' }}>
-              <thead>
-                <tr style={{ backgroundColor: '#f8f9fa' }}>
-                  <th style={{ padding: '0.75em', border: '1px solid #dee2e6', textAlign: 'left' }}>ID</th>
-                  <th style={{ padding: '0.75em', border: '1px solid #dee2e6', textAlign: 'left' }}>Name</th>
-                  <th style={{ padding: '0.75em', border: '1px solid #dee2e6', textAlign: 'left' }}>Email</th>
-                  <th style={{ padding: '0.75em', border: '1px solid #dee2e6', textAlign: 'left' }}>Registered Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user.id}>
-                    <td style={{ padding: '0.75em', border: '1px solid #dee2e6' }}>{user.id}</td>
-                    <td style={{ padding: '0.75em', border: '1px solid #dee2e6' }}>{user.name}</td>
-                    <td style={{ padding: '0.75em', border: '1px solid #dee2e6' }}>{user.email}</td>
-                    <td style={{ padding: '0.75em', border: '1px solid #dee2e6' }}>{user.registeredDate}</td>
+        <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>👥 User Management</h3>
+          <p style={{ color: '#666', marginBottom: '1.5em', fontSize: '1.1em' }}>Total Registered Users: <strong style={{ color: '#2BBBAD' }}>{users.length}</strong></p>
+          {users.length > 0 ? (
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ backgroundColor: '#2BBBAD', color: 'white' }}>
+                    <th style={{ padding: '1em', textAlign: 'left', borderRadius: '8px 0 0 0' }}>ID</th>
+                    <th style={{ padding: '1em', textAlign: 'left' }}>Name</th>
+                    <th style={{ padding: '1em', textAlign: 'left' }}>Email</th>
+                    <th style={{ padding: '1em', textAlign: 'left', borderRadius: '0 8px 0 0' }}>Registered Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p>No users registered yet.</p>
-        )}
+                </thead>
+                <tbody>
+                  {users.map((user, index) => (
+                    <tr key={user.id} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                      <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{user.id}</td>
+                      <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{user.name}</td>
+                      <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{user.email}</td>
+                      <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{user.registeredDate}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p style={{ textAlign: 'center', color: '#999', padding: '2em' }}>No users registered yet.</p>
+          )}
+        </div>
       </div>
     </div>
   );

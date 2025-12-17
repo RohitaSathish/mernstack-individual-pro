@@ -29,19 +29,9 @@ function Home() {
           <h2 className="section-title">Our Pharmacy Services</h2>
           <div className="services-grid">
             <div className="service-card">
-              <div className="service-icon prescription"></div>
-              <h3>Prescription Medicines</h3>
-              <p>Authentic prescription drugs from licensed manufacturers with proper quality assurance and safety standards.</p>
-            </div>
-            <div className="service-card">
               <div className="service-icon otc"></div>
               <h3>Over-the-Counter</h3>
               <p>Wide range of OTC medications for common ailments, vitamins, supplements, and health products.</p>
-            </div>
-            <div className="service-card">
-              <div className="service-icon consultation"></div>
-              <h3>Pharmacist Consultation</h3>
-              <p>Professional consultation services for medication management, drug interactions, and health advice.</p>
             </div>
             <div className="service-card">
               <div className="service-icon delivery"></div>

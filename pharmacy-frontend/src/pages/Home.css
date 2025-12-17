@@ -7,7 +7,7 @@
 
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(135deg, rgba(108, 155, 207, 0.95) 0%, rgba(74, 92, 106, 0.95) 100%),
+  background: linear-gradient(135deg, rgba(43, 187, 173, 0.95) 0%, rgba(31, 168, 154, 0.95) 100%),
               url('/pharmacy.jpeg');
   background-size: cover;
   background-position: center;
@@ -108,7 +108,7 @@
 
 .service-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 15px 40px rgba(108, 155, 207, 0.2);
+  box-shadow: 0 15px 40px rgba(43, 187, 173, 0.2);
   border-color: var(--primary-color);
 }
 
@@ -121,8 +121,8 @@
   align-items: center;
   justify-content: center;
   font-size: 2.5em;
-  background: linear-gradient(135deg, var(--primary-color), #5a8bc4);
-  box-shadow: 0 4px 15px rgba(108, 155, 207, 0.3);
+  background: linear-gradient(135deg, #2BBBAD, #1FA89A);
+  box-shadow: 0 4px 15px rgba(43, 187, 173, 0.3);
   position: relative;
 }
 
@@ -173,7 +173,7 @@
 /* Awareness Section */
 .awareness-section {
   padding: 5em 2em;
-  background: linear-gradient(135deg, #e8f4f8 0%, #f0f8ff 100%);
+  background: linear-gradient(135deg, #E0F7FA, #E3F2FD);
 }
 
 .awareness-grid {
@@ -259,8 +259,8 @@
 }
 
 .category-card:hover {
-  border-color: var(--primary-color);
-  background: linear-gradient(135deg, #f8f9fa 0%, #e8f4f8 100%);
+  border-color: #2BBBAD;
+  background: linear-gradient(135deg, #f8f9fa 0%, #E0F7FA 100%);
   transform: scale(1.05);
 }
 
@@ -272,8 +272,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--primary-color) 0%, #5a8bc4 100%);
-  box-shadow: 0 4px 15px rgba(108, 155, 207, 0.3);
+  background: linear-gradient(135deg, #2BBBAD 0%, #1FA89A 100%);
+  box-shadow: 0 4px 15px rgba(43, 187, 173, 0.3);
   position: relative;
 }
 
@@ -422,14 +422,14 @@
 .trust-item:hover {
   background: #f8f9fa;
   transform: translateY(-5px);
-  box-shadow: 0 6px 25px rgba(108, 155, 207, 0.2);
+  box-shadow: 0 6px 25px rgba(43, 187, 173, 0.2);
 }
 
 .trust-number {
   font-size: 3em;
   font-weight: 700;
   margin-bottom: 0.3em;
-  color: var(--primary-color);
+  color: #2BBBAD;
   text-shadow: none;
 }
 

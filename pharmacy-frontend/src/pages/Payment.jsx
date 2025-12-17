@@ -6,6 +6,14 @@ function Payment() {
   const { cart, clearCart } = useCart();
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState("card");
+  const [deliveryData, setDeliveryData] = useState({
+    fullName: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
+  });
   const [paymentData, setPaymentData] = useState({
     cardNumber: "",
     expiry: "",
@@ -17,7 +25,11 @@ function Payment() {
 
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-  const handleChange = (e) => {
+  const handleDeliveryChange = (e) => {
+    setDeliveryData({ ...deliveryData, [e.target.name]: e.target.value });
+  };
+
+  const handlePaymentChange = (e) => {
     setPaymentData({ ...paymentData, [e.target.name]: e.target.value });
   };
 
@@ -68,12 +80,87 @@ function Payment() {
 
   return (
     <div className="container">
-      <h2>Payment Page</h2>
+      <h2>Delivery & Payment Details</h2>
       <h3>Total Amount: ₹ {total}</h3>
       <form
         onSubmit={handleSubmit}
-        style={{ maxWidth: "400px", margin: "0 auto" }}
+        style={{ maxWidth: "500px", margin: "0 auto" }}
       >
+        <h3 style={{ marginTop: "1.5em", borderBottom: "2px solid #007bff", paddingBottom: "0.5em" }}>Delivery Information</h3>
+        <div style={{ marginBottom: "1em" }}>
+          <label>Full Name:</label>
+          <input
+            type="text"
+            name="fullName"
+            placeholder="Enter your full name"
+            value={deliveryData.fullName}
+            onChange={handleDeliveryChange}
+            required
+            style={{ width: "100%", padding: "8px" }}
+          />
+        </div>
+        <div style={{ marginBottom: "1em" }}>
+          <label>Phone Number:</label>
+          <input
+            type="tel"
+            name="phone"
+            placeholder="10-digit mobile number"
+            value={deliveryData.phone}
+            onChange={handleDeliveryChange}
+            required
+            style={{ width: "100%", padding: "8px" }}
+          />
+        </div>
+        <div style={{ marginBottom: "1em" }}>
+          <label>Delivery Address:</label>
+          <textarea
+            name="address"
+            placeholder="House/Flat No., Street, Landmark"
+            value={deliveryData.address}
+            onChange={handleDeliveryChange}
+            required
+            rows="3"
+            style={{ width: "100%", padding: "8px" }}
+          />
+        </div>
+        <div style={{ marginBottom: "1em" }}>
+          <label>City:</label>
+          <input
+            type="text"
+            name="city"
+            placeholder="City"
+            value={deliveryData.city}
+            onChange={handleDeliveryChange}
+            required
+            style={{ width: "100%", padding: "8px" }}
+          />
+        </div>
+        <div style={{ marginBottom: "1em" }}>
+          <label>State:</label>
+          <input
+            type="text"
+            name="state"
+            placeholder="State"
+            value={deliveryData.state}
+            onChange={handleDeliveryChange}
+            required
+            style={{ width: "100%", padding: "8px" }}
+          />
+        </div>
+        <div style={{ marginBottom: "1em" }}>
+          <label>Pincode:</label>
+          <input
+            type="text"
+            name="pincode"
+            placeholder="6-digit pincode"
+            value={deliveryData.pincode}
+            onChange={handleDeliveryChange}
+            required
+            style={{ width: "100%", padding: "8px" }}
+          />
+        </div>
+
+        <h3 style={{ marginTop: "1.5em", borderBottom: "2px solid #007bff", paddingBottom: "0.5em" }}>Payment Method</h3>
         <div style={{ marginBottom: "1em" }}>
           <label>Payment Method:</label>
           <br />
@@ -122,7 +209,7 @@ function Payment() {
                 type="text"
                 name="cardNumber"
                 placeholder="1234 5678 9012 3456"
-                onChange={handleChange}
+                onChange={handlePaymentChange}
                 required
                 style={{ width: "100%", padding: "8px" }}
               />
@@ -133,7 +220,7 @@ function Payment() {
                 type="text"
                 name="expiry"
                 placeholder="MM/YY"
-                onChange={handleChange}
+                onChange={handlePaymentChange}
                 required
                 style={{ width: "100%", padding: "8px" }}
               />
@@ -144,7 +231,7 @@ function Payment() {
                 type="text"
                 name="cvv"
                 placeholder="123"
-                onChange={handleChange}
+                onChange={handlePaymentChange}
                 required
                 style={{ width: "100%", padding: "8px" }}
               />
@@ -155,7 +242,7 @@ function Payment() {
                 type="text"
                 name="name"
                 placeholder="John Doe"
-                onChange={handleChange}
+                onChange={handlePaymentChange}
                 required
                 style={{ width: "100%", padding: "8px" }}
               />
@@ -170,7 +257,7 @@ function Payment() {
               type="text"
               name="bankName"
               placeholder="e.g., SBI, HDFC"
-              onChange={handleChange}
+              onChange={handlePaymentChange}
               required
               style={{ width: "100%", padding: "8px" }}
             />
@@ -184,7 +271,7 @@ function Payment() {
               type="text"
               name="upiId"
               placeholder="yourname@upi"
-              onChange={handleChange}
+              onChange={handlePaymentChange}
               required
               style={{ width: "100%", padding: "8px" }}
             />

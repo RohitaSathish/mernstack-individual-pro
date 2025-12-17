@@ -33,34 +33,45 @@ function ProtectedAdminRoute({ children }) {
 function Navigation() {
   const { isLoggedIn, logout, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     logout();
     navigate('/');
   };
 
+  const showNavLinks = isLoggedIn && location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/register';
+
   return (
     <header style={{
-      backgroundColor: '#007bff',
-      color: 'white',
-      padding: '1em',
+      backgroundColor: '#ffffff',
+      color: '#2c3e50',
+      padding: '1em 2em',
       display: 'flex',
-      justifyContent: 'space-between',
+      justifyContent: isLoggedIn ? 'space-between' : 'center',
       alignItems: 'center',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      backdropFilter: 'blur(5px)'
+      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+      borderBottom: '3px solid #2BBBAD'
     }}>
-      <h1 style={{ margin: 0, fontSize: '1.8em' }}>HealCare</h1>
-      {isLoggedIn && (
-        <nav>
-          <Link to="/medicines" style={{ color: 'white', margin: '0 1em', textDecoration: 'none' }}>Browse Medicines</Link>
-          <Link to="/cart" style={{ color: 'white', margin: '0 1em', textDecoration: 'none' }}>Cart</Link>
-          <Link to="/orders" style={{ color: 'white', margin: '0 1em', textDecoration: 'none' }}>Orders</Link>
-          <Link to="/contact" style={{ color: 'white', margin: '0 1em', textDecoration: 'none' }}>Contact</Link>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
+        <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" fill="#2BBBAD" opacity="0.2"/>
+          <path d="M20 8 L20 32 M8 20 L32 20" stroke="#2BBBAD" strokeWidth="4" strokeLinecap="round"/>
+          <circle cx="20" cy="20" r="6" fill="#1FA89A"/>
+          <path d="M16 20 L19 23 L24 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+        </svg>
+        <h1 style={{ margin: 0, fontSize: '1.8em', color: '#2BBBAD', fontWeight: '700' }}>HealCare</h1>
+      </div>
+      {showNavLinks && (
+        <nav style={{ display: 'flex', alignItems: 'center' }}>
+          <Link to="/medicines" style={{ color: '#2c3e50', margin: '0 1em', textDecoration: 'none', fontWeight: '500', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color = '#2BBBAD'} onMouseOut={(e) => e.target.style.color = '#2c3e50'}>Browse Medicines</Link>
+          <Link to="/cart" style={{ color: '#2c3e50', margin: '0 1em', textDecoration: 'none', fontWeight: '500', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color = '#2BBBAD'} onMouseOut={(e) => e.target.style.color = '#2c3e50'}>Cart</Link>
+          <Link to="/orders" style={{ color: '#2c3e50', margin: '0 1em', textDecoration: 'none', fontWeight: '500', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color = '#2BBBAD'} onMouseOut={(e) => e.target.style.color = '#2c3e50'}>Orders</Link>
+          <Link to="/contact" style={{ color: '#2c3e50', margin: '0 1em', textDecoration: 'none', fontWeight: '500', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color = '#2BBBAD'} onMouseOut={(e) => e.target.style.color = '#2c3e50'}>Contact</Link>
           {user && user.role === 'admin' && (
-            <Link to="/admin" style={{ color: 'white', margin: '0 1em', textDecoration: 'none', fontWeight: 'bold' }}>Admin Panel</Link>
+            <Link to="/admin" style={{ color: '#2c3e50', margin: '0 1em', textDecoration: 'none', fontWeight: 'bold', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color = '#2BBBAD'} onMouseOut={(e) => e.target.style.color = '#2c3e50'}>Admin Panel</Link>
           )}
-          <button onClick={handleLogout} style={{ color: 'white', background: 'none', border: 'none', margin: '0 1em', textDecoration: 'underline', cursor: 'pointer' }}>Logout</button>
+          <button onClick={handleLogout} style={{ color: '#2c3e50', background: 'none', border: 'none', margin: '0 1em', textDecoration: 'underline', cursor: 'pointer', fontWeight: '500', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color = '#2BBBAD'} onMouseOut={(e) => e.target.style.color = '#2c3e50'}>Logout</button>
         </nav>
       )}
     </header>
