@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from "./AuthContext";
 import { CartProvider } from "./CartContext";
 import { UserProvider } from "./UserContext";
 import { MedicineProvider } from "./MedicineContext";
+import { MessageProvider } from "./MessageContext";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -116,7 +117,9 @@ function App() {
         <UserProvider>
           <CartProvider>
             <MedicineProvider>
-              <AppContent />
+              <MessageProvider>
+                <AppContent />
+              </MessageProvider>
             </MedicineProvider>
           </CartProvider>
         </UserProvider>

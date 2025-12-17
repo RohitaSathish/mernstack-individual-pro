@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useMedicines } from "../MedicineContext";
 import { useUser } from "../UserContext";
+import { useMessages } from "../MessageContext";
 
 function Admin() {
   const { medicines, addMedicine, updateMedicine, deleteMedicine } = useMedicines();
   const { users } = useUser();
+  const { messages, replyToMessage } = useMessages();
 
   const [newMedicine, setNewMedicine] = useState({
     name: "",
@@ -19,6 +21,8 @@ function Admin() {
   const [editingId, setEditingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [replyingTo, setReplyingTo] = useState(null);
+  const [replyText, setReplyText] = useState("");
 
   const handleChange = (e) => {
     setNewMedicine({ ...newMedicine, [e.target.name]: e.target.value });
@@ -42,6 +46,15 @@ function Admin() {
 
   const handleDelete = (id) => {
     deleteMedicine(id);
+  };
+
+  const handleReply = (id) => {
+    if (replyText.trim()) {
+      replyToMessage(id, replyText);
+      setReplyingTo(null);
+      setReplyText("");
+      alert("Reply sent successfully!");
+    }
   };
 
   return (
@@ -180,6 +193,61 @@ function Admin() {
           )}
           {searchTerm && searchResults.length === 0 && (
             <p style={{ textAlign: 'center', color: '#999', padding: '2em' }}>No medicines found matching your search.</p>
+          )}
+        </div>
+
+        <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
+          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>💬 Customer Messages</h3>
+          {messages.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1em' }}>
+              {messages.map((msg) => (
+                <div key={msg.id} style={{ backgroundColor: '#f8f9fa', borderRadius: '10px', padding: '1.5em', border: `2px solid ${msg.status === 'replied' ? '#28a745' : '#ffc107'}` }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1em' }}>
+                    <div>
+                      <h4 style={{ color: '#333', marginBottom: '0.3em' }}>{msg.name}</h4>
+                      <p style={{ color: '#666', fontSize: '0.9em' }}>{msg.email}</p>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <span style={{ display: 'inline-block', padding: '5px 15px', backgroundColor: msg.status === 'replied' ? '#28a745' : '#ffc107', color: 'white', borderRadius: '20px', fontSize: '0.85em', fontWeight: '600' }}>
+                        {msg.status === 'replied' ? 'Replied' : 'Pending'}
+                      </span>
+                      <p style={{ color: '#999', fontSize: '0.85em', marginTop: '0.5em' }}>{msg.date}</p>
+                    </div>
+                  </div>
+                  <div style={{ marginBottom: '1em' }}>
+                    <p style={{ color: '#555', fontWeight: '600', marginBottom: '0.3em' }}>Subject: {msg.subject}</p>
+                    <p style={{ color: '#666', lineHeight: '1.6' }}>{msg.message}</p>
+                  </div>
+                  {msg.reply && (
+                    <div style={{ backgroundColor: '#e6f7ff', padding: '1em', borderRadius: '8px', borderLeft: '3px solid #2BBBAD', marginBottom: '1em' }}>
+                      <p style={{ color: '#555', fontWeight: '600', marginBottom: '0.5em' }}>Admin Reply:</p>
+                      <p style={{ color: '#666' }}>{msg.reply}</p>
+                    </div>
+                  )}
+                  {!msg.reply && (
+                    replyingTo === msg.id ? (
+                      <div>
+                        <textarea
+                          value={replyText}
+                          onChange={(e) => setReplyText(e.target.value)}
+                          placeholder="Type your reply..."
+                          rows="3"
+                          style={{ width: '100%', padding: '10px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em', marginBottom: '0.5em' }}
+                        />
+                        <div style={{ display: 'flex', gap: '0.5em' }}>
+                          <button onClick={() => handleReply(msg.id)} style={{ padding: '10px 20px', backgroundColor: '#1FA89A', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Send Reply</button>
+                          <button onClick={() => { setReplyingTo(null); setReplyText(''); }} style={{ padding: '10px 20px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Cancel</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button onClick={() => setReplyingTo(msg.id)} style={{ padding: '10px 20px', backgroundColor: '#2BBBAD', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Reply</button>
+                    )
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p style={{ textAlign: 'center', color: '#999', padding: '2em' }}>No customer messages yet.</p>
           )}
         </div>
 
