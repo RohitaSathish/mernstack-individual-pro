@@ -1,0 +1,260 @@
+:root {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: #213547;
+  background-color: #ffffff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --primary-color: #6c9bcf; /* Milder blue */
+  --secondary-color: #8fa3b8; /* Softer gray */
+  --success-color: #7fb77e; /* Mild green */
+  --danger-color: #e8a5a5; /* Soft red */
+  --light-color: #f8f9fa;
+  --dark-color: #4a5c6a; /* Darker but not black */
+  --border-color: #e1e8ed;
+  --shadow: 0 2px 4px rgba(0,0,0,0.1);
+  --background-gradient: linear-gradient(135deg, #f0f4f8 0%, #e1e8ed 100%); /* Milder gradient */
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+a:hover {
+  color: #0056b3;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--background-gradient);
+  background-image: url('/pharmacy.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: var(--dark-color);
+}
+
+h1 {
+  font-size: 2.5em;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+}
+
+h2 {
+  font-size: 2em;
+  line-height: 1.3;
+  margin-bottom: 0.5em;
+  color: var(--dark-color);
+}
+
+h3 {
+  font-size: 1.5em;
+  line-height: 1.4;
+  margin-bottom: 0.5em;
+}
+
+p {
+  margin: 0.5em 0;
+}
+
+button {
+  border-radius: 6px;
+  border: 1px solid var(--primary-color);
+  padding: 0.75em 1.5em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+button:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,123,255,0.3);
+}
+button:focus,
+button:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: 1em;
+  padding: 0.75em;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  transition: border-color 0.2s ease;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 2em auto 2em auto;
+  padding: 2em;
+  background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.intro-section {
+  text-align: center;
+  margin-bottom: 3em;
+  padding-bottom: 2em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.intro-section h2 {
+  color: var(--primary-color);
+  margin-bottom: 1em;
+}
+
+.intro-section p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: var(--secondary-color);
+  max-width: 600px;
+  margin: 0 auto 2em auto;
+}
+
+.auth-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+}
+
+.browse-section {
+  text-align: center;
+  margin-top: 2em;
+}
+
+.browse-section h3 {
+  color: var(--dark-color);
+  margin-bottom: 0.5em;
+}
+
+.browse-section p {
+  color: var(--secondary-color);
+  margin-bottom: 1.5em;
+}
+
+.admin-section {
+  margin-bottom: 2em;
+  padding: 1.5em;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.admin-section h3 {
+  color: var(--primary-color);
+  margin-bottom: 1em;
+}
+
+.admin-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  max-width: 400px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75em 1.5em;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: white;
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+form {
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.medicine-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5em;
+  margin-top: 2em;
+}
+
+.medicine-card {
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border-color);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 8px;
+  padding: 1.5em;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+.medicine-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.medicine-card h3 {
+  margin-bottom: 0.5em;
+  color: var(--dark-color);
+}
+
+.medicine-card p {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 1em;
+}
+
+.medicine-card button {
+  width: 100%;
+  padding: 0.75em;
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+.medicine-card button:hover {
+  background-color: #218838;
+  border-color: #218838;
+}
+

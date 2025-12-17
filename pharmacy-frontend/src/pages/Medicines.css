@@ -1,0 +1,359 @@
+/* Medicines Page Styles */
+
+.medicines-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+}
+
+.medicines-header {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #5a8bc4 100%);
+  color: white;
+  padding: 4em 2em 3em;
+  text-align: center;
+}
+
+.medicines-header h1 {
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+  font-weight: 700;
+}
+
+.medicines-header p {
+  font-size: 1.2em;
+  opacity: 0.9;
+}
+
+/* Categories Grid */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5em;
+  margin-top: 2em;
+  padding: 2em 0;
+}
+
+.category-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 2em 1.5em;
+  border-radius: 12px;
+  text-align: center;
+  border: 2px solid #e1e8ed;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.category-card:hover {
+  border-color: var(--primary-color);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e8f4f8 100%);
+  transform: scale(1.05);
+  color: inherit;
+}
+
+.category-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1em;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-color) 0%, #5a8bc4 100%);
+  box-shadow: 0 4px 15px rgba(108, 155, 207, 0.3);
+  position: relative;
+}
+
+.category-icon::before {
+  content: '';
+  font-size: 2em;
+  font-weight: bold;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.category-icon.pain-relief::before {
+  content: 'Rx';
+  font-size: 1.8em;
+}
+
+.category-icon.antibiotics::before {
+  content: 'AB';
+  font-size: 1.6em;
+}
+
+.category-icon.vitamins::before {
+  content: 'V+';
+  font-size: 1.8em;
+}
+
+.category-icon.chronic::before {
+  content: 'CC';
+  font-size: 1.6em;
+}
+
+.category-icon.skincare::before {
+  content: 'SC';
+  font-size: 1.6em;
+}
+
+.category-icon.respiratory::before {
+  content: 'RS';
+  font-size: 1.6em;
+}
+
+.category-icon.digestive::before {
+  content: 'DG';
+  font-size: 1.6em;
+}
+
+.category-icon.womens-health::before {
+  content: 'WH';
+  font-size: 1.6em;
+}
+
+.category-card h4 {
+  color: var(--dark-color);
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+}
+
+.category-card p {
+  color: #6c757d;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+/* Category Filter */
+.category-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin: 2em 0;
+  padding: 1.5em;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  justify-content: center;
+}
+
+.category-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.8em 1.5em;
+  border: 2px solid #e1e8ed;
+  background: white;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  color: var(--dark-color);
+}
+
+.category-filter-btn:hover {
+  border-color: var(--primary-color);
+  background: #f8f9fa;
+  transform: translateY(-2px);
+}
+
+.category-filter-btn.active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.category-filter-icon {
+  font-size: 1.2em;
+}
+
+/* Medicines Grid */
+.medicines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2em;
+  margin-top: 2em;
+}
+
+.medicine-item-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #e1e8ed;
+}
+
+.medicine-item-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(108, 155, 207, 0.2);
+  border-color: var(--primary-color);
+}
+
+.medicine-image {
+  height: 200px;
+  overflow: hidden;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.medicine-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.medicine-item-card:hover .medicine-image img {
+  transform: scale(1.05);
+}
+
+.medicine-content {
+  padding: 1.5em;
+}
+
+.medicine-content h3 {
+  font-size: 1.3em;
+  color: var(--dark-color);
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.medicine-dosage {
+  color: var(--secondary-color);
+  font-size: 0.9em;
+  margin-bottom: 0.5em;
+  font-weight: 500;
+}
+
+.medicine-brand {
+  color: #6c757d;
+  font-size: 0.85em;
+  margin-bottom: 0.8em;
+}
+
+.medicine-purpose {
+  color: var(--dark-color);
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin-bottom: 1.2em;
+  padding: 0.8em;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid var(--primary-color);
+}
+
+.medicine-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1em;
+}
+
+.medicine-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+}
+
+.medicine-price {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.medicine-rating {
+  color: #ffa500;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.add-to-cart-btn {
+  background: linear-gradient(135deg, var(--success-color) 0%, #28a745 100%);
+  color: white;
+  border: none;
+  padding: 0.8em 1.5em;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+}
+
+.add-to-cart-btn:hover {
+  background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+}
+
+.no-medicines {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3em;
+  color: var(--secondary-color);
+  font-size: 1.1em;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .medicines-header {
+    padding: 3em 1em 2em;
+  }
+
+  .medicines-header h1 {
+    font-size: 2em;
+  }
+
+  .category-filter {
+    margin: 1em 0;
+    padding: 1em;
+  }
+
+  .category-filter-btn {
+    padding: 0.6em 1em;
+    font-size: 0.9em;
+  }
+
+  .medicines-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5em;
+  }
+
+  .medicine-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1em;
+  }
+
+  .add-to-cart-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .medicines-header {
+    padding: 2em 1em;
+  }
+
+  .medicines-header h1 {
+    font-size: 1.8em;
+  }
+
+  .category-filter {
+    gap: 0.5em;
+  }
+
+  .category-filter-btn {
+    padding: 0.5em 0.8em;
+    font-size: 0.8em;
+  }
+
+  .medicine-content {
+    padding: 1em;
+  }
+}
