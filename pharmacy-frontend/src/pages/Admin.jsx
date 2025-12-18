@@ -1,18 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMedicines } from "../MedicineContext";
-import { useUser } from "../UserContext";
-import { useMessages } from "../MessageContext";
+import { adminService } from "../services/adminService.js";
 
 function Admin() {
   const { medicines, addMedicine, updateMedicine, deleteMedicine } = useMedicines();
-  const { users } = useUser();
-  const { messages, replyToMessage } = useMessages();
+  const [users, setUsers] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
-    const savedOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-    console.log("Admin - Loaded orders:", savedOrders);
-    setOrders(savedOrders);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [messagesData, ordersData, usersData] = await Promise.all([
+          adminService.getMessages(),
+          adminService.getOrders(),
+          adminService.getUsers()
+        ]);
+        setMessages(messagesData);
+        setOrders(ordersData);
+        setUsers(usersData);
+      } catch (error) {
+        console.error('Error fetching admin data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
   const [newMedicine, setNewMedicine] = useState({
@@ -22,7 +36,8 @@ function Admin() {
     price: "",
     rating: "",
     purpose: "",
-    image: ""
+    image: "",
+    category: ""
   });
 
   const [editingId, setEditingId] = useState(null);
@@ -35,32 +50,64 @@ function Admin() {
     setNewMedicine({ ...newMedicine, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingId) {
-      updateMedicine(editingId, newMedicine);
-      setEditingId(null);
-    } else {
-      addMedicine(newMedicine);
+    console.log('Submitting medicine:', newMedicine);
+    
+    // Validate required fields
+    if (!newMedicine.name || !newMedicine.dosage || !newMedicine.brand || !newMedicine.price || !newMedicine.category) {
+      alert('Please fill in all required fields');
+      return;
     }
-    setNewMedicine({ name: "", dosage: "", brand: "", price: "", rating: "", purpose: "", image: "" });
+    
+    try {
+      if (editingId) {
+        await updateMedicine(editingId, newMedicine);
+        setEditingId(null);
+        alert('Medicine updated successfully!');
+      } else {
+        console.log('Adding new medicine...');
+        const result = await addMedicine(newMedicine);
+        console.log('Medicine added:', result);
+        alert('Medicine added successfully!');
+      }
+      setNewMedicine({ name: "", dosage: "", brand: "", price: "", rating: "", purpose: "", image: "", category: "" });
+    } catch (error) {
+      console.error('Submit error:', error);
+      alert('Error: ' + error.message);
+    }
   };
 
   const handleEdit = (med) => {
     setNewMedicine(med);
-    setEditingId(med.id);
+    setEditingId(med._id);
   };
 
-  const handleDelete = (id) => {
-    deleteMedicine(id);
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this medicine?')) {
+      try {
+        await deleteMedicine(id);
+        alert('Medicine deleted successfully!');
+      } catch (error) {
+        alert('Error deleting medicine: ' + error.message);
+      }
+    }
   };
 
-  const handleReply = (id) => {
+  const handleReply = async (id) => {
     if (replyText.trim()) {
-      replyToMessage(id, replyText);
-      setReplyingTo(null);
-      setReplyText("");
-      alert("Reply sent successfully!");
+      try {
+        await adminService.replyToMessage(id, replyText);
+        setMessages(messages.map(msg => 
+          msg._id === id ? { ...msg, reply: replyText, status: 'replied' } : msg
+        ));
+        setReplyingTo(null);
+        setReplyText("");
+        alert("Reply sent successfully!");
+      } catch (error) {
+        console.error('Error sending reply:', error);
+        alert("Failed to send reply. Please try again.");
+      }
     }
   };
 
@@ -139,14 +186,30 @@ function Admin() {
               value={newMedicine.image}
               onChange={handleChange}
               required
-              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em', gridColumn: 'span 2' }}
+              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
             />
+            <select
+              name="category"
+              value={newMedicine.category}
+              onChange={handleChange}
+              required
+              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+            >
+              <option value="">Select Category</option>
+              <option value="Pain Relief">Pain Relief</option>
+              <option value="Antibiotics">Antibiotics</option>
+              <option value="Vitamins">Vitamins</option>
+              <option value="Chronic Care">Chronic Care</option>
+              <option value="Respiratory">Respiratory</option>
+              <option value="Digestive">Digestive</option>
+              <option value="Women's Health">Women's Health</option>
+            </select>
             <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1em' }}>
               <button type="submit" style={{ flex: 1, padding: '14px', backgroundColor: '#1FA89A', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1em', fontWeight: '600', cursor: 'pointer' }}>
                 {editingId ? "Update Medicine" : "Add Medicine"}
               </button>
               {editingId && (
-                <button type="button" onClick={() => { setEditingId(null); setNewMedicine({ name: "", dosage: "", brand: "", price: "", rating: "", purpose: "", image: "" }); }} style={{ padding: '14px 30px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1em', fontWeight: '600', cursor: 'pointer' }}>
+                <button type="button" onClick={() => { setEditingId(null); setNewMedicine({ name: "", dosage: "", brand: "", price: "", rating: "", purpose: "", image: "", category: "" }); }} style={{ padding: '14px 30px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1em', fontWeight: '600', cursor: 'pointer' }}>
                   Cancel
                 </button>
               )}
@@ -166,9 +229,9 @@ function Admin() {
                 setSearchTerm(term);
                 if (term.trim()) {
                   const results = medicines.filter(med => 
-                    med.name.toLowerCase().includes(term.toLowerCase()) ||
-                    med.brand.toLowerCase().includes(term.toLowerCase()) ||
-                    med.purpose.toLowerCase().includes(term.toLowerCase())
+                    med.name?.toLowerCase().includes(term.toLowerCase()) ||
+                    med.brand?.toLowerCase().includes(term.toLowerCase()) ||
+                    med.purpose?.toLowerCase().includes(term.toLowerCase())
                   );
                   setSearchResults(results);
                 } else {
@@ -183,7 +246,7 @@ function Admin() {
           {searchResults.length > 0 && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5em' }}>
               {searchResults.map((med) => (
-                <div key={med.id} style={{ backgroundColor: '#f8f9fa', borderRadius: '12px', padding: '1.5em', border: '2px solid #e0e0e0', transition: 'all 0.3s' }}>
+                <div key={med._id} style={{ backgroundColor: '#f8f9fa', borderRadius: '12px', padding: '1.5em', border: '2px solid #e0e0e0', transition: 'all 0.3s' }}>
                   <img src={med.image} alt={med.name} style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1em' }} />
                   <h4 style={{ color: '#333', fontSize: '1.2em', marginBottom: '0.5em' }}>{med.name}</h4>
                   <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '0.3em' }}>{med.dosage} - {med.brand}</p>
@@ -192,7 +255,7 @@ function Admin() {
                   <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '1em' }}>{med.purpose}</p>
                   <div style={{ display: 'flex', gap: '0.5em' }}>
                     <button onClick={() => handleEdit(med)} style={{ flex: 1, padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Edit</button>
-                    <button onClick={() => handleDelete(med.id)} style={{ flex: 1, padding: '10px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Delete</button>
+                    <button onClick={() => handleDelete(med._id)} style={{ flex: 1, padding: '10px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Delete</button>
                   </div>
                 </div>
               ))}
@@ -205,10 +268,12 @@ function Admin() {
 
         <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
           <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>Customer Messages</h3>
-          {messages.length > 0 ? (
+          {loading ? (
+            <p style={{ textAlign: 'center', color: '#666', padding: '2em' }}>Loading messages...</p>
+          ) : messages.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1em' }}>
               {messages.map((msg) => (
-                <div key={msg.id} style={{ backgroundColor: '#f8f9fa', borderRadius: '10px', padding: '1.5em', border: `2px solid ${msg.status === 'replied' ? '#28a745' : '#ffc107'}` }}>
+                <div key={msg._id} style={{ backgroundColor: '#f8f9fa', borderRadius: '10px', padding: '1.5em', border: `2px solid ${msg.status === 'replied' ? '#28a745' : '#ffc107'}` }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1em' }}>
                     <div>
                       <h4 style={{ color: '#333', marginBottom: '0.3em' }}>{msg.name}</h4>
@@ -218,7 +283,7 @@ function Admin() {
                       <span style={{ display: 'inline-block', padding: '5px 15px', backgroundColor: msg.status === 'replied' ? '#28a745' : '#ffc107', color: 'white', borderRadius: '20px', fontSize: '0.85em', fontWeight: '600' }}>
                         {msg.status === 'replied' ? 'Replied' : 'Pending'}
                       </span>
-                      <p style={{ color: '#999', fontSize: '0.85em', marginTop: '0.5em' }}>{msg.date}</p>
+                      <p style={{ color: '#999', fontSize: '0.85em', marginTop: '0.5em' }}>{new Date(msg.createdAt).toLocaleDateString()}</p>
                     </div>
                   </div>
                   <div style={{ marginBottom: '1em' }}>
@@ -232,7 +297,7 @@ function Admin() {
                     </div>
                   )}
                   {!msg.reply && (
-                    replyingTo === msg.id ? (
+                    replyingTo === msg._id ? (
                       <div>
                         <textarea
                           value={replyText}
@@ -242,12 +307,12 @@ function Admin() {
                           style={{ width: '100%', padding: '10px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em', marginBottom: '0.5em' }}
                         />
                         <div style={{ display: 'flex', gap: '0.5em' }}>
-                          <button onClick={() => handleReply(msg.id)} style={{ padding: '10px 20px', backgroundColor: '#1FA89A', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Send Reply</button>
+                          <button onClick={() => handleReply(msg._id)} style={{ padding: '10px 20px', backgroundColor: '#1FA89A', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Send Reply</button>
                           <button onClick={() => { setReplyingTo(null); setReplyText(''); }} style={{ padding: '10px 20px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Cancel</button>
                         </div>
                       </div>
                     ) : (
-                      <button onClick={() => setReplyingTo(msg.id)} style={{ padding: '10px 20px', backgroundColor: '#2BBBAD', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Reply</button>
+                      <button onClick={() => setReplyingTo(msg._id)} style={{ padding: '10px 20px', backgroundColor: '#2BBBAD', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Reply</button>
                     )
                   )}
                 </div>
@@ -261,14 +326,16 @@ function Admin() {
         <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
           <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>Order Management</h3>
           <p style={{ color: '#666', marginBottom: '1.5em', fontSize: '1.1em' }}>Total Orders: <strong style={{ color: '#2BBBAD' }}>{orders.length}</strong></p>
-          {orders.length > 0 ? (
+          {loading ? (
+            <p style={{ textAlign: 'center', color: '#666', padding: '2em' }}>Loading orders...</p>
+          ) : orders.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5em' }}>
               {orders.map((order) => (
-                <div key={order.id} style={{ backgroundColor: '#f8f9fa', borderRadius: '12px', padding: '1.5em', border: '2px solid #e0e0e0' }}>
+                <div key={order._id} style={{ backgroundColor: '#f8f9fa', borderRadius: '12px', padding: '1.5em', border: '2px solid #e0e0e0' }}>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5em' }}>
                     <div>
-                      <h4 style={{ color: '#333', marginBottom: '0.5em' }}>Order #{order.id}</h4>
-                      <p style={{ color: '#666', marginBottom: '0.3em' }}>Date: {order.date}</p>
+                      <h4 style={{ color: '#333', marginBottom: '0.5em' }}>Order #{order._id}</h4>
+                      <p style={{ color: '#666', marginBottom: '0.3em' }}>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
                       <p style={{ color: '#666', marginBottom: '0.3em' }}>Payment: {order.paymentMethod}</p>
                       <p style={{ color: '#2BBBAD', fontWeight: '700', fontSize: '1.2em' }}>Total: ₹{order.total}</p>
                     </div>
@@ -304,7 +371,9 @@ function Admin() {
         <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
           <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>User Management</h3>
           <p style={{ color: '#666', marginBottom: '1.5em', fontSize: '1.1em' }}>Total Registered Users: <strong style={{ color: '#2BBBAD' }}>{users.length}</strong></p>
-          {users.length > 0 ? (
+          {loading ? (
+            <p style={{ textAlign: 'center', color: '#666', padding: '2em' }}>Loading users...</p>
+          ) : users.length > 0 ? (
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
@@ -317,11 +386,11 @@ function Admin() {
                 </thead>
                 <tbody>
                   {users.map((user, index) => (
-                    <tr key={user.id} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
-                      <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{user.id}</td>
+                    <tr key={user._id} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
+                      <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{user._id}</td>
                       <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{user.name}</td>
                       <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{user.email}</td>
-                      <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{user.registeredDate}</td>
+                      <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{new Date(user.createdAt).toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>

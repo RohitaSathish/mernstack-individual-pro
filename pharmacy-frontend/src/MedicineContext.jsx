@@ -1,4 +1,39 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+// Simple API functions
+const API_BASE_URL = 'http://localhost:5000/api';
+
+const api = {
+  get: async (endpoint) => {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return response.json();
+  },
+  post: async (endpoint, data) => {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return response.json();
+  },
+  put: async (endpoint, data) => {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return response.json();
+  },
+  delete: async (endpoint) => {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return response.json();
+  },
+};
 
 const MedicineContext = createContext();
 
@@ -7,7 +42,22 @@ export const useMedicines = () => {
 };
 
 export const MedicineProvider = ({ children }) => {
-  const [medicines, setMedicines] = useState([
+  const [medicines, setMedicines] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load medicines from backend on component mount
+  useEffect(() => {
+    fetchMedicines();
+  }, []);
+
+  const fetchMedicines = async () => {
+    try {
+      const data = await api.get('/medicines');
+      setMedicines(data);
+    } catch (error) {
+      console.error('Error fetching medicines:', error);
+      // Fallback to hardcoded data if API fails
+      setMedicines([
     // Pain Relief
     { id: 1, name: "Paracetamol", dosage: "650mg", brand: "Dolo", price: 20, rating: 4.5, purpose: "Pain relief and fever reduction", category: "Pain Relief", image: "https://tiimg.tistatic.com/fp/1/007/442/paracetamol-dolo-650-mg-tablets--885.jpg", description: "Paracetamol is a widely used over-the-counter pain reliever and fever reducer. It is effective for treating mild to moderate pain and reducing fever.", usage: "Take 1-2 tablets every 4-6 hours as needed. Do not exceed 8 tablets in 24 hours. Take with or without food.", ingredients: "Paracetamol 650mg, Microcrystalline cellulose, Starch, Magnesium stearate" },
     { id: 4, name: "Ibuprofen", dosage: "400mg", brand: "Brufen", price: 15, rating: 4.3, purpose: "Anti-inflammatory and pain relief", category: "Pain Relief", image: "https://5.imimg.com/data5/SELLER/Default/2024/7/438682358/MA/IB/IW/10526113/brufen-400mg-ibuprofen-tablets-500x500.png", description: "Ibuprofen is a nonsteroidal anti-inflammatory drug (NSAID) used to reduce inflammation, pain, and fever.", usage: "Take 1 tablet every 6-8 hours with food. Do not exceed 3 tablets in 24 hours.", ingredients: "Ibuprofen 400mg, Lactose, Corn starch, Colloidal silicon dioxide" },
@@ -57,24 +107,50 @@ export const MedicineProvider = ({ children }) => {
     { id: 75, name: "Loperamide", dosage: "2mg", brand: "Imodium", price: 35, rating: 4.2, purpose: "Treats diarrhea", category: "Digestive", image: "https://www.xalmeds.com/cdn/shop/files/IMG_7050.jpg?v=1698939146" },
     { id: 76, name: "Antacid", dosage: "10ml", brand: "ENO", price: 25, rating: 4.1, purpose: "Relieves acidity and heartburn", category: "Digestive", image: "https://weshine.ca/wp-content/uploads/2021/10/06081500728-600x600.png" },
     { id: 77, name: "Ranitidine", dosage: "150mg", brand: "Aciloc", price: 50, rating: 4.3, purpose: "Reduces stomach acid", category: "Digestive", image: "https://5.imimg.com/data5/SELLER/Default/2024/11/466536958/OP/KH/ZX/233772675/ranitidine-aciloc-150-mg-tablets-1000x1000.jpg" },
-    { id: 78, name: "Simethicone", dosage: "40mg", brand: "Gas-X", price: 30, rating: 4.0, purpose: "Relieves gas and bloating", category: "Digestive", image: "https://i5.walmartimages.com/asr/489c4c71-252d-4183-aaf5-4a0efe1a641b.e3e89ac112f8c5a6443e4ec4b3a6bbd8.jpeg" }
-  ]);
-
-  const addMedicine = (medicine) => {
-    const newId = Math.max(...medicines.map(med => med.id)) + 1;
-    setMedicines([...medicines, { ...medicine, id: newId }]);
+        { id: 78, name: "Simethicone", dosage: "40mg", brand: "Gas-X", price: 30, rating: 4.0, purpose: "Relieves gas and bloating", category: "Digestive", image: "https://i5.walmartimages.com/asr/489c4c71-252d-4183-aaf5-4a0efe1a641b.e3e89ac112f8c5a6443e4ec4b3a6bbd8.jpeg" }
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const updateMedicine = (id, updatedMedicine) => {
-    setMedicines(medicines.map(med => med.id === id ? { ...updatedMedicine, id } : med));
+  const addMedicine = async (medicine) => {
+    try {
+      console.log('API call: Adding medicine', medicine);
+      const newMedicine = await api.post('/medicines', medicine);
+      console.log('API response:', newMedicine);
+      setMedicines([...medicines, newMedicine]);
+      return newMedicine;
+    } catch (error) {
+      console.error('Error adding medicine:', error);
+      console.error('Error details:', error.message);
+      throw error;
+    }
   };
 
-  const deleteMedicine = (id) => {
-    setMedicines(medicines.filter(med => med.id !== id));
+  const updateMedicine = async (id, updatedMedicine) => {
+    try {
+      const updated = await api.put(`/medicines/${id}`, updatedMedicine);
+      setMedicines(medicines.map(med => med._id === id ? updated : med));
+      return updated;
+    } catch (error) {
+      console.error('Error updating medicine:', error);
+      throw error;
+    }
+  };
+
+  const deleteMedicine = async (id) => {
+    try {
+      await api.delete(`/medicines/${id}`);
+      setMedicines(medicines.filter(med => med._id !== id));
+    } catch (error) {
+      console.error('Error deleting medicine:', error);
+      throw error;
+    }
   };
 
   return (
-    <MedicineContext.Provider value={{ medicines, addMedicine, updateMedicine, deleteMedicine }}>
+    <MedicineContext.Provider value={{ medicines, addMedicine, updateMedicine, deleteMedicine, loading, fetchMedicines }}>
       {children}
     </MedicineContext.Provider>
   );
