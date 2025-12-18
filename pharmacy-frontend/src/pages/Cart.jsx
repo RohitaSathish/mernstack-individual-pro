@@ -13,13 +13,13 @@ function Cart() {
     <div style={{ minHeight: '80vh', background: 'linear-gradient(135deg, #E0F7FA, #E3F2FD)', padding: '2em' }}>
       <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
         <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
-          <h2 style={{ color: '#333', fontSize: '2em', marginBottom: '0.5em', borderBottom: '3px solid #667eea', paddingBottom: '0.5em' }}>🛒 Your Cart</h2>
+          <h2 style={{ color: '#333', fontSize: '2em', marginBottom: '0.5em', borderBottom: '3px solid #667eea', paddingBottom: '0.5em' }}>Your Cart</h2>
           <p style={{ color: '#666', marginBottom: '1.5em' }}>{cart.length} item(s) in your cart</p>
         </div>
 
         {cart.length === 0 ? (
           <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '4em 2em', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
-            <div style={{ fontSize: '4em', marginBottom: '0.5em' }}>🛒</div>
+            <div style={{ fontSize: '2em', marginBottom: '0.5em', color: '#667eea', fontWeight: 'bold' }}>CART</div>
             <h3 style={{ color: '#333', marginBottom: '0.5em' }}>Your cart is empty</h3>
             <p style={{ color: '#666', marginBottom: '2em' }}>Add some medicines to get started!</p>
             <Link to="/medicines">

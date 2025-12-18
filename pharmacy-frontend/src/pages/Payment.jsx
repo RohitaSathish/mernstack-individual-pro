@@ -36,12 +36,22 @@ function Payment() {
   const handleSubmit = (e) => {
     e.preventDefault();
     
+    // Validate delivery data
+    const requiredFields = ['fullName', 'phone', 'address', 'city', 'state', 'pincode'];
+    const missingFields = requiredFields.filter(field => !deliveryData[field] || deliveryData[field].trim() === '');
+    
+    if (missingFields.length > 0) {
+      alert(`Please fill in all required fields: ${missingFields.join(', ')}`);
+      return;
+    }
+    
     // Save order to localStorage
     const newOrder = {
       id: Date.now(),
       date: new Date().toLocaleDateString(),
       paymentMethod: paymentMethod,
       total: total,
+      deliveryAddress: deliveryData,
       items: cart.map(item => ({
         name: item.name,
         price: item.price,
@@ -50,9 +60,14 @@ function Payment() {
       }))
     };
     
+    console.log("Payment - New order being saved:", newOrder);
+    console.log("Payment - Delivery data:", deliveryData);
+    
     const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
     existingOrders.push(newOrder);
     localStorage.setItem("orders", JSON.stringify(existingOrders));
+    
+    console.log("Payment - All orders after save:", existingOrders);
     
     let message = "Payment successful! Thank you for your purchase.";
     if (paymentMethod === "cod") {

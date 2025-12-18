@@ -10,7 +10,6 @@ function Medicines() {
     { name: "Antibiotics", icon: "antibiotics", desc: "Bacterial infection treatments, Antiviral medications", color: "#4ecdc4" },
     { name: "Vitamins", icon: "vitamins", desc: "Essential vitamins, Minerals, Nutritional supplements", color: "#ffe66d" },
     { name: "Chronic Care", icon: "chronic", desc: "Diabetes, Hypertension, Heart disease medications", color: "#a8e6cf" },
-    { name: "Skincare", icon: "skincare", desc: "Dermatological treatments, Topical medications", color: "#ffd3b6" },
     { name: "Respiratory", icon: "respiratory", desc: "Asthma inhalers, Cough syrups, Allergy medications", color: "#95e1d3" },
     { name: "Digestive", icon: "digestive", desc: "Antacids, Probiotics, Digestive enzymes", color: "#f38181" },
     { name: "Women's Health", icon: "womens-health", desc: "Prenatal vitamins, Menstrual care, Iron supplements", color: "#aa96da" }
@@ -28,7 +27,7 @@ function Medicines() {
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
           <input
             type="text"
-            placeholder="🔍 Search categories..."
+            placeholder="Search categories..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ width: '100%', padding: '15px 20px', fontSize: '1em', border: '2px solid #e0e0e0', borderRadius: '50px', outline: 'none', transition: 'all 0.3s' }}

@@ -12,6 +12,13 @@ export const MessageProvider = ({ children }) => {
     return stored ? JSON.parse(stored) : [];
   });
 
+  const refreshMessages = () => {
+    const stored = localStorage.getItem('customerMessages');
+    if (stored) {
+      setMessages(JSON.parse(stored));
+    }
+  };
+
   const addMessage = (messageData) => {
     const newMessage = {
       id: Date.now(),
@@ -34,7 +41,7 @@ export const MessageProvider = ({ children }) => {
   };
 
   return (
-    <MessageContext.Provider value={{ messages, addMessage, replyToMessage }}>
+    <MessageContext.Provider value={{ messages, addMessage, replyToMessage, refreshMessages }}>
       {children}
     </MessageContext.Provider>
   );

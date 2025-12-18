@@ -48,7 +48,7 @@ function Home() {
           <h2 className="section-title">Health Awareness & Safety</h2>
           <div className="awareness-grid">
             <div className="awareness-card">
-              <h3>🛡️ Medication Safety</h3>
+              <h3>Medication Safety</h3>
               <ul>
                 <li>Always check expiry dates before consuming medicines</li>
                 <li>Store medications in cool, dry places away from sunlight</li>
@@ -57,7 +57,7 @@ function Home() {
               </ul>
             </div>
             <div className="awareness-card">
-              <h3>⚠️ Drug Interactions</h3>
+              <h3>Drug Interactions</h3>
               <ul>
                 <li>Inform your pharmacist about all medications you're taking</li>
                 <li>Avoid alcohol while taking certain medications</li>
@@ -66,7 +66,7 @@ function Home() {
               </ul>
             </div>
             <div className="awareness-card">
-              <h3>🏥 When to Seek Help</h3>
+              <h3>When to Seek Help</h3>
               <ul>
                 <li>Severe allergic reactions (difficulty breathing, swelling)</li>
                 <li>Unusual side effects or worsening symptoms</li>
@@ -131,7 +131,7 @@ function Home() {
       <section className="emergency-section">
         <div className="container">
           <div className="emergency-card">
-            <h2>🚨 Emergency Information</h2>
+            <h2>Emergency Information</h2>
             <div className="emergency-content">
               <div className="emergency-item">
                 <h4>Poison Control</h4>

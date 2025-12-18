@@ -7,6 +7,13 @@ function Admin() {
   const { medicines, addMedicine, updateMedicine, deleteMedicine } = useMedicines();
   const { users } = useUser();
   const { messages, replyToMessage } = useMessages();
+  const [orders, setOrders] = useState([]);
+
+  React.useEffect(() => {
+    const savedOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+    console.log("Admin - Loaded orders:", savedOrders);
+    setOrders(savedOrders);
+  }, []);
 
   const [newMedicine, setNewMedicine] = useState({
     name: "",
@@ -61,13 +68,13 @@ function Admin() {
     <div style={{ minHeight: '80vh', background: 'linear-gradient(135deg, #E0F7FA, #E3F2FD)', padding: '2em' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em', textAlign: 'center' }}>
-          <h2 style={{ color: '#2BBBAD', fontSize: '2.5em', marginBottom: '0.5em' }}>⚙️ Admin Dashboard</h2>
+          <h2 style={{ color: '#2BBBAD', fontSize: '2.5em', marginBottom: '0.5em' }}>Admin Dashboard</h2>
           <p style={{ color: '#666' }}>Manage medicines and users</p>
         </div>
 
         <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
           <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>
-            {editingId ? "✏️ Edit Medicine" : "➕ Add New Medicine"}
+            {editingId ? "Edit Medicine" : "Add New Medicine"}
           </h3>
           <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1em' }}>
             <input
@@ -148,11 +155,11 @@ function Admin() {
         </div>
 
         <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
-          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>📦 Manage Medicines</h3>
+          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>Manage Medicines</h3>
           <div style={{ maxWidth: '600px', margin: '0 auto 1.5em auto' }}>
             <input
               type="text"
-              placeholder="🔍 Search medicines..."
+              placeholder="Search medicines..."
               value={searchTerm}
               onChange={(e) => {
                 const term = e.target.value;
@@ -177,11 +184,11 @@ function Admin() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5em' }}>
               {searchResults.map((med) => (
                 <div key={med.id} style={{ backgroundColor: '#f8f9fa', borderRadius: '12px', padding: '1.5em', border: '2px solid #e0e0e0', transition: 'all 0.3s' }}>
-                  <img src={med.image} alt={med.name} style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1em' }} />
+                  <img src={med.image} alt={med.name} style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1em' }} />
                   <h4 style={{ color: '#333', fontSize: '1.2em', marginBottom: '0.5em' }}>{med.name}</h4>
                   <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '0.3em' }}>{med.dosage} - {med.brand}</p>
                   <p style={{ color: '#2BBBAD', fontWeight: '700', fontSize: '1.3em', margin: '0.5em 0' }}>₹ {med.price}</p>
-                  <p style={{ color: '#ffa500', marginBottom: '0.5em' }}>⭐ {med.rating}/5</p>
+                  <p style={{ color: '#ffa500', marginBottom: '0.5em' }}>Rating: {med.rating}/5</p>
                   <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '1em' }}>{med.purpose}</p>
                   <div style={{ display: 'flex', gap: '0.5em' }}>
                     <button onClick={() => handleEdit(med)} style={{ flex: 1, padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Edit</button>
@@ -197,7 +204,7 @@ function Admin() {
         </div>
 
         <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
-          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>💬 Customer Messages</h3>
+          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>Customer Messages</h3>
           {messages.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1em' }}>
               {messages.map((msg) => (
@@ -251,8 +258,51 @@ function Admin() {
           )}
         </div>
 
+        <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
+          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>Order Management</h3>
+          <p style={{ color: '#666', marginBottom: '1.5em', fontSize: '1.1em' }}>Total Orders: <strong style={{ color: '#2BBBAD' }}>{orders.length}</strong></p>
+          {orders.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5em' }}>
+              {orders.map((order) => (
+                <div key={order.id} style={{ backgroundColor: '#f8f9fa', borderRadius: '12px', padding: '1.5em', border: '2px solid #e0e0e0' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5em' }}>
+                    <div>
+                      <h4 style={{ color: '#333', marginBottom: '0.5em' }}>Order #{order.id}</h4>
+                      <p style={{ color: '#666', marginBottom: '0.3em' }}>Date: {order.date}</p>
+                      <p style={{ color: '#666', marginBottom: '0.3em' }}>Payment: {order.paymentMethod}</p>
+                      <p style={{ color: '#2BBBAD', fontWeight: '700', fontSize: '1.2em' }}>Total: ₹{order.total}</p>
+                    </div>
+                    {order.deliveryAddress && (
+                      <div>
+                        <h5 style={{ color: '#333', marginBottom: '0.5em' }}>Delivery Address</h5>
+                        <p style={{ color: '#666', marginBottom: '0.2em' }}><strong>{order.deliveryAddress.fullName}</strong></p>
+                        <p style={{ color: '#666', marginBottom: '0.2em' }}>Phone: {order.deliveryAddress.phone}</p>
+                        <p style={{ color: '#666', marginBottom: '0.2em' }}>{order.deliveryAddress.address}</p>
+                        <p style={{ color: '#666', marginBottom: '0.2em' }}>{order.deliveryAddress.city}, {order.deliveryAddress.state}</p>
+                        <p style={{ color: '#666' }}>PIN: {order.deliveryAddress.pincode}</p>
+                      </div>
+                    )}
+                    <div>
+                      <h5 style={{ color: '#333', marginBottom: '0.5em' }}>Items Ordered</h5>
+                      {order.items.map((item, index) => (
+                        <div key={index} style={{ backgroundColor: 'white', padding: '0.5em', borderRadius: '6px', marginBottom: '0.5em' }}>
+                          <p style={{ color: '#333', fontWeight: '600', fontSize: '0.9em' }}>{item.name}</p>
+                          <p style={{ color: '#666', fontSize: '0.8em' }}>{item.dosage} - {item.brand}</p>
+                          <p style={{ color: '#2BBBAD', fontWeight: '600', fontSize: '0.9em' }}>₹{item.price}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p style={{ textAlign: 'center', color: '#999', padding: '2em' }}>No orders placed yet.</p>
+          )}
+        </div>
+
         <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
-          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>👥 User Management</h3>
+          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>User Management</h3>
           <p style={{ color: '#666', marginBottom: '1.5em', fontSize: '1.1em' }}>Total Registered Users: <strong style={{ color: '#2BBBAD' }}>{users.length}</strong></p>
           {users.length > 0 ? (
             <div style={{ overflowX: 'auto' }}>

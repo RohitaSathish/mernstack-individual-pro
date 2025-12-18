@@ -7,6 +7,7 @@ function Orders() {
 
   useEffect(() => {
     const savedOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+    console.log("Orders - Loaded orders:", savedOrders);
     setOrders(savedOrders.reverse());
   }, []);
 
@@ -18,13 +19,13 @@ function Orders() {
     <div style={{ minHeight: '80vh', background: 'linear-gradient(135deg, #E0F7FA, #E3F2FD)', padding: '2em' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
-          <h2 style={{ color: '#333', fontSize: '2em', marginBottom: '0.5em', borderBottom: '3px solid #667eea', paddingBottom: '0.5em' }}>📦 My Orders</h2>
+          <h2 style={{ color: '#333', fontSize: '2em', marginBottom: '0.5em', borderBottom: '3px solid #667eea', paddingBottom: '0.5em' }}>My Orders</h2>
           <p style={{ color: '#666' }}>Track and manage your orders</p>
         </div>
 
         {orders.length === 0 ? (
           <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '4em 2em', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
-            <div style={{ fontSize: '4em', marginBottom: '0.5em' }}>📦</div>
+            <div style={{ fontSize: '2em', marginBottom: '0.5em', color: '#667eea', fontWeight: 'bold' }}>ORDERS</div>
             <h3 style={{ color: '#333', marginBottom: '0.5em' }}>No orders yet</h3>
             <p style={{ color: '#666', marginBottom: '2em' }}>Start shopping to see your orders here!</p>
             <Link to="/medicines">
@@ -84,13 +85,13 @@ function Orders() {
                   </div>
                 </div>
 
-                {order.deliveryInfo && (
+                {order.deliveryAddress && (
                   <div style={{ backgroundColor: '#fff9e6', padding: '1.5em', borderRadius: '10px', marginBottom: '1.5em', border: '1px solid #ffe66d' }}>
-                    <h4 style={{ color: '#333', marginBottom: '0.8em', fontSize: '1.1em' }}>📍 Delivery Address</h4>
-                    <p style={{ color: '#555', marginBottom: '0.3em', fontWeight: '600' }}>{order.deliveryInfo.fullName}</p>
-                    <p style={{ color: '#666', marginBottom: '0.2em' }}>{order.deliveryInfo.address}</p>
-                    <p style={{ color: '#666', marginBottom: '0.2em' }}>{order.deliveryInfo.city}, {order.deliveryInfo.state} - {order.deliveryInfo.pincode}</p>
-                    <p style={{ color: '#666' }}>📞 {order.deliveryInfo.phone}</p>
+                    <h4 style={{ color: '#333', marginBottom: '0.8em', fontSize: '1.1em' }}>Delivery Address</h4>
+                    <p style={{ color: '#555', marginBottom: '0.3em', fontWeight: '600' }}>{order.deliveryAddress.fullName}</p>
+                    <p style={{ color: '#666', marginBottom: '0.2em' }}>{order.deliveryAddress.address}</p>
+                    <p style={{ color: '#666', marginBottom: '0.2em' }}>{order.deliveryAddress.city}, {order.deliveryAddress.state} - {order.deliveryAddress.pincode}</p>
+                    <p style={{ color: '#666' }}>Phone: {order.deliveryAddress.phone}</p>
                   </div>
                 )}
 

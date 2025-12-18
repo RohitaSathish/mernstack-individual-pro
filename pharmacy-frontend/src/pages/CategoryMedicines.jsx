@@ -41,7 +41,7 @@ function CategoryMedicines() {
                   <div className="medicine-footer">
                     <div className="medicine-info">
                       <span className="medicine-price">₹{med.price}</span>
-                      <span className="medicine-rating">★ {med.rating}/5</span>
+                      <span className="medicine-rating">Rating: {med.rating}/5</span>
                     </div>
                     <button 
                       className="add-to-cart-btn" 
