@@ -10,11 +10,17 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
   const addToCart = (item) => {
-    setCart([...cart, item]);
+    console.log('Adding to cart:', item);
+    const cartItem = { ...item, id: item._id || item.id };
+    setCart(prevCart => {
+      const newCart = [...prevCart, cartItem];
+      console.log('Updated cart:', newCart);
+      return newCart;
+    });
   };
 
   const removeFromCart = (id) => {
-    setCart(cart.filter(item => item.id !== id));
+    setCart(cart.filter(item => (item.id || item._id) !== id));
   };
 
   const clearCart = () => {

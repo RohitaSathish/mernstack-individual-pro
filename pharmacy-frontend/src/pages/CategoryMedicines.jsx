@@ -1,33 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import { useCart } from '../CartContext';
+import { useMedicines } from '../MedicineContext';
 
 function CategoryMedicines() {
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
-  const [medicines, setMedicines] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetchMedicines();
-  }, [category]);
-
-  const fetchMedicines = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`http://localhost:5000/api/medicines/category/${category}`);
-      if (!response.ok) throw new Error('Failed to fetch medicines');
-      const data = await response.json();
-      setMedicines(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { medicines: allMedicines, loading } = useMedicines();
+  const { addToCart } = useCart();
+  
+  const medicines = allMedicines.filter(medicine => medicine.category === category);
 
   if (loading) return <div style={{ textAlign: 'center', padding: '3em' }}>Loading medicines...</div>;
-  if (error) return <div style={{ textAlign: 'center', padding: '3em', color: 'red' }}>Error: {error}</div>;
 
   return (
     <div style={{ minHeight: '80vh', background: 'linear-gradient(135deg, #E0F7FA, #E3F2FD)', padding: '2em 0' }}>
@@ -53,16 +37,33 @@ function CategoryMedicines() {
               <h3 style={{ color: '#333', marginBottom: '0.5em' }}>{medicine.name}</h3>
               <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '0.5em' }}>{medicine.brand} - {medicine.dosage}</p>
               <p style={{ color: '#888', fontSize: '0.85em', marginBottom: '1em' }}>{medicine.purpose}</p>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1em' }}>
                 <span style={{ fontSize: '1.2em', fontWeight: 'bold', color: '#667eea' }}>₹{medicine.price}</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
                   <span style={{ color: '#ffa500' }}>★ {medicine.rating}</span>
-                  {medicine.inStock ? 
-                    <span style={{ color: '#4caf50', fontSize: '0.8em' }}>In Stock</span> : 
-                    <span style={{ color: '#f44336', fontSize: '0.8em' }}>Out of Stock</span>
-                  }
                 </div>
               </div>
+              <button 
+                onClick={() => {
+                  addToCart(medicine);
+                  alert('Medicine added to cart!');
+                }}
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  backgroundColor: '#667eea',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontSize: '1em',
+                  fontWeight: 'bold'
+                }}
+                onMouseOver={(e) => e.target.style.backgroundColor = '#5a67d8'}
+                onMouseOut={(e) => e.target.style.backgroundColor = '#667eea'}
+              >
+                Add to Cart
+              </button>
             </div>
           ))}
         </div>

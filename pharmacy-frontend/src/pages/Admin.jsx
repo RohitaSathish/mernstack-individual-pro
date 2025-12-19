@@ -52,9 +52,7 @@ function Admin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitting medicine:', newMedicine);
     
-    // Validate required fields
     if (!newMedicine.name || !newMedicine.dosage || !newMedicine.brand || !newMedicine.price || !newMedicine.category) {
       alert('Please fill in all required fields');
       return;
@@ -66,14 +64,11 @@ function Admin() {
         setEditingId(null);
         alert('Medicine updated successfully!');
       } else {
-        console.log('Adding new medicine...');
-        const result = await addMedicine(newMedicine);
-        console.log('Medicine added:', result);
+        await addMedicine(newMedicine);
         alert('Medicine added successfully!');
       }
       setNewMedicine({ name: "", dosage: "", brand: "", price: "", rating: "", purpose: "", image: "", category: "" });
     } catch (error) {
-      console.error('Submit error:', error);
       alert('Error: ' + error.message);
     }
   };
@@ -105,25 +100,25 @@ function Admin() {
         setReplyText("");
         alert("Reply sent successfully!");
       } catch (error) {
-        console.error('Error sending reply:', error);
         alert("Failed to send reply. Please try again.");
       }
     }
   };
 
   return (
-    <div style={{ minHeight: '80vh', background: 'linear-gradient(135deg, #E0F7FA, #E3F2FD)', padding: '2em' }}>
+    <div style={{ padding: '20px', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em', textAlign: 'center' }}>
-          <h2 style={{ color: '#2BBBAD', fontSize: '2.5em', marginBottom: '0.5em' }}>Admin Dashboard</h2>
-          <p style={{ color: '#666' }}>Manage medicines and users</p>
+        
+        <div style={{ backgroundColor: 'white', padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
+          <h2 style={{ color: '#333', margin: '0 0 10px 0' }}>Admin Dashboard</h2>
+          <p style={{ color: '#666', margin: '0' }}>Manage medicines and users</p>
         </div>
 
-        <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
-          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>
+        <div style={{ backgroundColor: 'white', padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
+          <h3 style={{ color: '#333', marginBottom: '15px', borderBottom: '2px solid #007bff', paddingBottom: '5px' }}>
             {editingId ? "Edit Medicine" : "Add New Medicine"}
           </h3>
-          <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1em' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px' }}>
             <input
               type="text"
               name="name"
@@ -131,7 +126,7 @@ function Admin() {
               value={newMedicine.name}
               onChange={handleChange}
               required
-              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+              style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
             />
             <input
               type="text"
@@ -140,7 +135,7 @@ function Admin() {
               value={newMedicine.dosage}
               onChange={handleChange}
               required
-              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+              style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
             />
             <input
               type="text"
@@ -149,7 +144,7 @@ function Admin() {
               value={newMedicine.brand}
               onChange={handleChange}
               required
-              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+              style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
             />
             <input
               type="number"
@@ -158,7 +153,7 @@ function Admin() {
               value={newMedicine.price}
               onChange={handleChange}
               required
-              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+              style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
             />
             <input
               type="number"
@@ -167,8 +162,7 @@ function Admin() {
               placeholder="Rating"
               value={newMedicine.rating}
               onChange={handleChange}
-              required
-              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+              style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
             />
             <input
               type="text"
@@ -176,8 +170,7 @@ function Admin() {
               placeholder="Purpose"
               value={newMedicine.purpose}
               onChange={handleChange}
-              required
-              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em', gridColumn: 'span 2' }}
+              style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px', gridColumn: 'span 2' }}
             />
             <input
               type="url"
@@ -185,15 +178,14 @@ function Admin() {
               placeholder="Image URL"
               value={newMedicine.image}
               onChange={handleChange}
-              required
-              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+              style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
             />
             <select
               name="category"
               value={newMedicine.category}
               onChange={handleChange}
               required
-              style={{ padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+              style={{ padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
             >
               <option value="">Select Category</option>
               <option value="Pain Relief">Pain Relief</option>
@@ -204,12 +196,12 @@ function Admin() {
               <option value="Digestive">Digestive</option>
               <option value="Women's Health">Women's Health</option>
             </select>
-            <div style={{ gridColumn: 'span 2', display: 'flex', gap: '1em' }}>
-              <button type="submit" style={{ flex: 1, padding: '14px', backgroundColor: '#1FA89A', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1em', fontWeight: '600', cursor: 'pointer' }}>
+            <div style={{ gridColumn: 'span 2', display: 'flex', gap: '10px' }}>
+              <button type="submit" style={{ flex: 1, padding: '12px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                 {editingId ? "Update Medicine" : "Add Medicine"}
               </button>
               {editingId && (
-                <button type="button" onClick={() => { setEditingId(null); setNewMedicine({ name: "", dosage: "", brand: "", price: "", rating: "", purpose: "", image: "", category: "" }); }} style={{ padding: '14px 30px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1em', fontWeight: '600', cursor: 'pointer' }}>
+                <button type="button" onClick={() => { setEditingId(null); setNewMedicine({ name: "", dosage: "", brand: "", price: "", rating: "", purpose: "", image: "", category: "" }); }} style={{ padding: '12px 20px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                   Cancel
                 </button>
               )}
@@ -217,9 +209,9 @@ function Admin() {
           </form>
         </div>
 
-        <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
-          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>Manage Medicines</h3>
-          <div style={{ maxWidth: '600px', margin: '0 auto 1.5em auto' }}>
+        <div style={{ backgroundColor: 'white', padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
+          <h3 style={{ color: '#333', marginBottom: '15px', borderBottom: '2px solid #007bff', paddingBottom: '5px' }}>Manage Medicines</h3>
+          <div style={{ marginBottom: '20px' }}>
             <input
               type="text"
               placeholder="Search medicines..."
@@ -238,62 +230,60 @@ function Admin() {
                   setSearchResults([]);
                 }
               }}
-              style={{ width: '100%', padding: '12px 20px', border: '2px solid #e0e0e0', borderRadius: '50px', fontSize: '1em', transition: 'border 0.3s' }}
-              onFocus={(e) => e.target.style.borderColor = '#2BBBAD'}
-              onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
+              style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
             />
           </div>
           {searchResults.length > 0 && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5em' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
               {searchResults.map((med) => (
-                <div key={med._id} style={{ backgroundColor: '#f8f9fa', borderRadius: '12px', padding: '1.5em', border: '2px solid #e0e0e0', transition: 'all 0.3s' }}>
-                  <img src={med.image} alt={med.name} style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1em' }} />
-                  <h4 style={{ color: '#333', fontSize: '1.2em', marginBottom: '0.5em' }}>{med.name}</h4>
-                  <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '0.3em' }}>{med.dosage} - {med.brand}</p>
-                  <p style={{ color: '#2BBBAD', fontWeight: '700', fontSize: '1.3em', margin: '0.5em 0' }}>₹ {med.price}</p>
-                  <p style={{ color: '#ffa500', marginBottom: '0.5em' }}>Rating: {med.rating}/5</p>
-                  <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '1em' }}>{med.purpose}</p>
-                  <div style={{ display: 'flex', gap: '0.5em' }}>
-                    <button onClick={() => handleEdit(med)} style={{ flex: 1, padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Edit</button>
-                    <button onClick={() => handleDelete(med._id)} style={{ flex: 1, padding: '10px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Delete</button>
+                <div key={med._id} style={{ backgroundColor: '#f9f9f9', padding: '15px', border: '1px solid #ddd', borderRadius: '8px' }}>
+                  {med.image && <img src={med.image} alt={med.name} style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '4px', marginBottom: '10px' }} />}
+                  <h4 style={{ color: '#333', margin: '0 0 8px 0' }}>{med.name}</h4>
+                  <p style={{ color: '#666', margin: '0 0 5px 0', fontSize: '14px' }}>{med.dosage} - {med.brand}</p>
+                  <p style={{ color: '#007bff', fontWeight: 'bold', margin: '5px 0' }}>₹ {med.price}</p>
+                  <p style={{ color: '#ffa500', margin: '0 0 5px 0', fontSize: '14px' }}>Rating: {med.rating}/5</p>
+                  <p style={{ color: '#666', margin: '0 0 15px 0', fontSize: '14px' }}>{med.purpose}</p>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button onClick={() => handleEdit(med)} style={{ flex: 1, padding: '8px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
+                    <button onClick={() => handleDelete(med._id)} style={{ flex: 1, padding: '8px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
                   </div>
                 </div>
               ))}
             </div>
           )}
           {searchTerm && searchResults.length === 0 && (
-            <p style={{ textAlign: 'center', color: '#999', padding: '2em' }}>No medicines found matching your search.</p>
+            <p style={{ textAlign: 'center', color: '#999', padding: '20px' }}>No medicines found matching your search.</p>
           )}
         </div>
 
-        <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
-          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>Customer Messages</h3>
+        <div style={{ backgroundColor: 'white', padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
+          <h3 style={{ color: '#333', marginBottom: '15px', borderBottom: '2px solid #007bff', paddingBottom: '5px' }}>Customer Messages</h3>
           {loading ? (
-            <p style={{ textAlign: 'center', color: '#666', padding: '2em' }}>Loading messages...</p>
+            <p style={{ textAlign: 'center', color: '#666', padding: '20px' }}>Loading messages...</p>
           ) : messages.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1em' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               {messages.map((msg) => (
-                <div key={msg._id} style={{ backgroundColor: '#f8f9fa', borderRadius: '10px', padding: '1.5em', border: `2px solid ${msg.status === 'replied' ? '#28a745' : '#ffc107'}` }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1em' }}>
+                <div key={msg._id} style={{ backgroundColor: '#f9f9f9', padding: '15px', border: '1px solid #ddd', borderRadius: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                     <div>
-                      <h4 style={{ color: '#333', marginBottom: '0.3em' }}>{msg.name}</h4>
-                      <p style={{ color: '#666', fontSize: '0.9em' }}>{msg.email}</p>
+                      <h4 style={{ color: '#333', margin: '0 0 5px 0' }}>{msg.name}</h4>
+                      <p style={{ color: '#666', margin: '0', fontSize: '14px' }}>{msg.email}</p>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <span style={{ display: 'inline-block', padding: '5px 15px', backgroundColor: msg.status === 'replied' ? '#28a745' : '#ffc107', color: 'white', borderRadius: '20px', fontSize: '0.85em', fontWeight: '600' }}>
+                      <span style={{ display: 'inline-block', padding: '5px 10px', backgroundColor: msg.status === 'replied' ? '#28a745' : '#ffc107', color: 'white', borderRadius: '4px', fontSize: '12px' }}>
                         {msg.status === 'replied' ? 'Replied' : 'Pending'}
                       </span>
-                      <p style={{ color: '#999', fontSize: '0.85em', marginTop: '0.5em' }}>{new Date(msg.createdAt).toLocaleDateString()}</p>
+                      <p style={{ color: '#999', fontSize: '12px', margin: '5px 0 0 0' }}>{new Date(msg.createdAt).toLocaleDateString()}</p>
                     </div>
                   </div>
-                  <div style={{ marginBottom: '1em' }}>
-                    <p style={{ color: '#555', fontWeight: '600', marginBottom: '0.3em' }}>Subject: {msg.subject}</p>
-                    <p style={{ color: '#666', lineHeight: '1.6' }}>{msg.message}</p>
+                  <div style={{ marginBottom: '10px' }}>
+                    <p style={{ color: '#555', fontWeight: 'bold', margin: '0 0 5px 0' }}>Subject: {msg.subject}</p>
+                    <p style={{ color: '#666', margin: '0' }}>{msg.message}</p>
                   </div>
                   {msg.reply && (
-                    <div style={{ backgroundColor: '#e6f7ff', padding: '1em', borderRadius: '8px', borderLeft: '3px solid #2BBBAD', marginBottom: '1em' }}>
-                      <p style={{ color: '#555', fontWeight: '600', marginBottom: '0.5em' }}>Admin Reply:</p>
-                      <p style={{ color: '#666' }}>{msg.reply}</p>
+                    <div style={{ backgroundColor: '#e6f7ff', padding: '10px', borderRadius: '4px', marginBottom: '10px' }}>
+                      <p style={{ color: '#555', fontWeight: 'bold', margin: '0 0 5px 0' }}>Admin Reply:</p>
+                      <p style={{ color: '#666', margin: '0' }}>{msg.reply}</p>
                     </div>
                   )}
                   {!msg.reply && (
@@ -304,58 +294,58 @@ function Admin() {
                           onChange={(e) => setReplyText(e.target.value)}
                           placeholder="Type your reply..."
                           rows="3"
-                          style={{ width: '100%', padding: '10px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em', marginBottom: '0.5em' }}
+                          style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '4px', marginBottom: '10px' }}
                         />
-                        <div style={{ display: 'flex', gap: '0.5em' }}>
-                          <button onClick={() => handleReply(msg._id)} style={{ padding: '10px 20px', backgroundColor: '#1FA89A', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Send Reply</button>
-                          <button onClick={() => { setReplyingTo(null); setReplyText(''); }} style={{ padding: '10px 20px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Cancel</button>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button onClick={() => handleReply(msg._id)} style={{ padding: '8px 15px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Send Reply</button>
+                          <button onClick={() => { setReplyingTo(null); setReplyText(''); }} style={{ padding: '8px 15px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
                         </div>
                       </div>
                     ) : (
-                      <button onClick={() => setReplyingTo(msg._id)} style={{ padding: '10px 20px', backgroundColor: '#2BBBAD', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}>Reply</button>
+                      <button onClick={() => setReplyingTo(msg._id)} style={{ padding: '8px 15px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Reply</button>
                     )
                   )}
                 </div>
               ))}
             </div>
           ) : (
-            <p style={{ textAlign: 'center', color: '#999', padding: '2em' }}>No customer messages yet.</p>
+            <p style={{ textAlign: 'center', color: '#999', padding: '20px' }}>No customer messages yet.</p>
           )}
         </div>
 
-        <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', marginBottom: '2em' }}>
-          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>Order Management</h3>
-          <p style={{ color: '#666', marginBottom: '1.5em', fontSize: '1.1em' }}>Total Orders: <strong style={{ color: '#2BBBAD' }}>{orders.length}</strong></p>
+        <div style={{ backgroundColor: 'white', padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
+          <h3 style={{ color: '#333', marginBottom: '15px', borderBottom: '2px solid #007bff', paddingBottom: '5px' }}>Order Management</h3>
+          <p style={{ color: '#666', marginBottom: '15px' }}>Total Orders: <strong style={{ color: '#007bff' }}>{orders.length}</strong></p>
           {loading ? (
-            <p style={{ textAlign: 'center', color: '#666', padding: '2em' }}>Loading orders...</p>
+            <p style={{ textAlign: 'center', color: '#666', padding: '20px' }}>Loading orders...</p>
           ) : orders.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5em' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               {orders.map((order) => (
-                <div key={order._id} style={{ backgroundColor: '#f8f9fa', borderRadius: '12px', padding: '1.5em', border: '2px solid #e0e0e0' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5em' }}>
+                <div key={order._id} style={{ backgroundColor: '#f9f9f9', padding: '15px', border: '1px solid #ddd', borderRadius: '8px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px' }}>
                     <div>
-                      <h4 style={{ color: '#333', marginBottom: '0.5em' }}>Order #{order._id}</h4>
-                      <p style={{ color: '#666', marginBottom: '0.3em' }}>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-                      <p style={{ color: '#666', marginBottom: '0.3em' }}>Payment: {order.paymentMethod}</p>
-                      <p style={{ color: '#2BBBAD', fontWeight: '700', fontSize: '1.2em' }}>Total: ₹{order.total}</p>
+                      <h4 style={{ color: '#333', margin: '0 0 8px 0' }}>Order #{order._id}</h4>
+                      <p style={{ color: '#666', margin: '0 0 5px 0', fontSize: '14px' }}>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
+                      <p style={{ color: '#666', margin: '0 0 5px 0', fontSize: '14px' }}>Payment: {order.paymentMethod}</p>
+                      <p style={{ color: '#007bff', fontWeight: 'bold', margin: '0' }}>Total: ₹{order.total}</p>
                     </div>
                     {order.deliveryAddress && (
                       <div>
-                        <h5 style={{ color: '#333', marginBottom: '0.5em' }}>Delivery Address</h5>
-                        <p style={{ color: '#666', marginBottom: '0.2em' }}><strong>{order.deliveryAddress.fullName}</strong></p>
-                        <p style={{ color: '#666', marginBottom: '0.2em' }}>Phone: {order.deliveryAddress.phone}</p>
-                        <p style={{ color: '#666', marginBottom: '0.2em' }}>{order.deliveryAddress.address}</p>
-                        <p style={{ color: '#666', marginBottom: '0.2em' }}>{order.deliveryAddress.city}, {order.deliveryAddress.state}</p>
-                        <p style={{ color: '#666' }}>PIN: {order.deliveryAddress.pincode}</p>
+                        <h5 style={{ color: '#333', margin: '0 0 8px 0' }}>Delivery Address</h5>
+                        <p style={{ color: '#666', margin: '0 0 3px 0', fontSize: '14px' }}><strong>{order.deliveryAddress.fullName}</strong></p>
+                        <p style={{ color: '#666', margin: '0 0 3px 0', fontSize: '14px' }}>Phone: {order.deliveryAddress.phone}</p>
+                        <p style={{ color: '#666', margin: '0 0 3px 0', fontSize: '14px' }}>{order.deliveryAddress.address}</p>
+                        <p style={{ color: '#666', margin: '0 0 3px 0', fontSize: '14px' }}>{order.deliveryAddress.city}, {order.deliveryAddress.state}</p>
+                        <p style={{ color: '#666', margin: '0', fontSize: '14px' }}>PIN: {order.deliveryAddress.pincode}</p>
                       </div>
                     )}
                     <div>
-                      <h5 style={{ color: '#333', marginBottom: '0.5em' }}>Items Ordered</h5>
+                      <h5 style={{ color: '#333', margin: '0 0 8px 0' }}>Items Ordered</h5>
                       {order.items.map((item, index) => (
-                        <div key={index} style={{ backgroundColor: 'white', padding: '0.5em', borderRadius: '6px', marginBottom: '0.5em' }}>
-                          <p style={{ color: '#333', fontWeight: '600', fontSize: '0.9em' }}>{item.name}</p>
-                          <p style={{ color: '#666', fontSize: '0.8em' }}>{item.dosage} - {item.brand}</p>
-                          <p style={{ color: '#2BBBAD', fontWeight: '600', fontSize: '0.9em' }}>₹{item.price}</p>
+                        <div key={index} style={{ backgroundColor: 'white', padding: '8px', borderRadius: '4px', marginBottom: '8px' }}>
+                          <p style={{ color: '#333', fontWeight: 'bold', margin: '0 0 3px 0', fontSize: '14px' }}>{item.name}</p>
+                          <p style={{ color: '#666', margin: '0 0 3px 0', fontSize: '12px' }}>{item.dosage} - {item.brand}</p>
+                          <p style={{ color: '#007bff', fontWeight: 'bold', margin: '0', fontSize: '14px' }}>₹{item.price}</p>
                         </div>
                       ))}
                     </div>
@@ -364,40 +354,45 @@ function Admin() {
               ))}
             </div>
           ) : (
-            <p style={{ textAlign: 'center', color: '#999', padding: '2em' }}>No orders placed yet.</p>
+            <p style={{ textAlign: 'center', color: '#999', padding: '20px' }}>No orders placed yet.</p>
           )}
         </div>
 
-        <div style={{ backgroundColor: 'white', borderRadius: '15px', padding: '2em', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
-          <h3 style={{ color: '#333', fontSize: '1.5em', marginBottom: '1.5em', borderBottom: '2px solid #2BBBAD', paddingBottom: '0.5em' }}>User Management</h3>
-          <p style={{ color: '#666', marginBottom: '1.5em', fontSize: '1.1em' }}>Total Registered Users: <strong style={{ color: '#2BBBAD' }}>{users.length}</strong></p>
+        <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}>
+          <h3 style={{ color: '#333', marginBottom: '15px', borderBottom: '2px solid #007bff', paddingBottom: '5px' }}>Registered Users</h3>
+          <p style={{ color: '#666', marginBottom: '15px' }}>Total Registered Users: <strong style={{ color: '#007bff' }}>{users.length}</strong></p>
           {loading ? (
-            <p style={{ textAlign: 'center', color: '#666', padding: '2em' }}>Loading users...</p>
+            <p style={{ textAlign: 'center', color: '#666', padding: '20px' }}>Loading users...</p>
           ) : users.length > 0 ? (
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ backgroundColor: '#2BBBAD', color: 'white' }}>
-                    <th style={{ padding: '1em', textAlign: 'left', borderRadius: '8px 0 0 0' }}>ID</th>
-                    <th style={{ padding: '1em', textAlign: 'left' }}>Name</th>
-                    <th style={{ padding: '1em', textAlign: 'left' }}>Email</th>
-                    <th style={{ padding: '1em', textAlign: 'left', borderRadius: '0 8px 0 0' }}>Registered Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((user, index) => (
-                    <tr key={user._id} style={{ backgroundColor: index % 2 === 0 ? '#f8f9fa' : 'white' }}>
-                      <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{user._id}</td>
-                      <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{user.name}</td>
-                      <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{user.email}</td>
-                      <td style={{ padding: '1em', border: '1px solid #e0e0e0' }}>{new Date(user.createdAt).toLocaleDateString()}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              {users.map((user) => (
+                <div key={user._id} style={{ backgroundColor: '#f9f9f9', padding: '15px', border: '1px solid #ddd', borderRadius: '8px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
+                    <div>
+                      <h4 style={{ color: '#333', margin: '0 0 8px 0' }}>User Details</h4>
+                      <p style={{ color: '#666', margin: '0 0 5px 0', fontSize: '14px' }}><strong>Name:</strong> {user.name}</p>
+                      <p style={{ color: '#666', margin: '0 0 5px 0', fontSize: '14px' }}><strong>Email:</strong> {user.email}</p>
+                      <p style={{ color: '#666', margin: '0', fontSize: '14px' }}><strong>Role:</strong> {user.role}</p>
+                    </div>
+                    <div>
+                      <h4 style={{ color: '#333', margin: '0 0 8px 0' }}>Registration Info</h4>
+                      <p style={{ color: '#666', margin: '0 0 5px 0', fontSize: '14px' }}><strong>User ID:</strong> {user._id}</p>
+                      <p style={{ color: '#666', margin: '0 0 5px 0', fontSize: '14px' }}><strong>Registered:</strong> {new Date(user.createdAt).toLocaleDateString()}</p>
+                      <p style={{ color: '#666', margin: '0', fontSize: '14px' }}><strong>Last Updated:</strong> {new Date(user.updatedAt).toLocaleDateString()}</p>
+                    </div>
+                    <div>
+                      <h4 style={{ color: '#333', margin: '0 0 8px 0' }}>Account Status</h4>
+                      <span style={{ display: 'inline-block', padding: '5px 10px', backgroundColor: user.role === 'admin' ? '#dc3545' : '#28a745', color: 'white', borderRadius: '4px', fontSize: '12px' }}>
+                        {user.role === 'admin' ? 'Administrator' : 'Regular User'}
+                      </span>
+                      <p style={{ color: '#666', margin: '8px 0 0 0', fontSize: '12px' }}>Password: Encrypted & Secured</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : (
-            <p style={{ textAlign: 'center', color: '#999', padding: '2em' }}>No users registered yet.</p>
+            <p style={{ textAlign: 'center', color: '#999', padding: '20px' }}>No users registered yet.</p>
           )}
         </div>
       </div>

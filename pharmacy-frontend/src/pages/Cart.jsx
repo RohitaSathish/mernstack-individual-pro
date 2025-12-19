@@ -42,7 +42,7 @@ function Cart() {
                     <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '0.2em' }}>{item.brand} - {item.dosage}</p>
                     <p style={{ color: '#667eea', fontWeight: '600', fontSize: '1.1em' }}>₹ {item.price}</p>
                   </div>
-                  <button onClick={() => removeFromCart(item.id)} style={{ padding: '10px 20px', backgroundColor: '#ff6b6b', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', transition: 'background 0.3s' }}
+                  <button onClick={() => removeFromCart(item.id || item._id)} style={{ padding: '10px 20px', backgroundColor: '#ff6b6b', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', transition: 'background 0.3s' }}
                     onMouseOver={(e) => e.target.style.backgroundColor = '#ee5a52'}
                     onMouseOut={(e) => e.target.style.backgroundColor = '#ff6b6b'}>
                     Remove

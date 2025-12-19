@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useUser } from "../UserContext";
 import { useAuth } from "../AuthContext";
 
 function Register() {
@@ -10,27 +9,49 @@ function Register() {
     password: "",
     confirmPassword: ""
   });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { addUser } = useUser();
   const { login } = useAuth();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    const result = addUser(formData);
-    if (result.success) {
-      alert(result.message);
-      login({ email: formData.email, name: formData.name, role: 'user' });
-      navigate("/medicines");
-    } else {
-      alert(result.message);
+    
+    setLoading(true);
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        login(data.user);
+        alert('Registration successful!');
+        navigate('/medicines');
+      } else {
+        alert(data.message || 'Registration failed');
+      }
+    } catch (error) {
+      alert('Network error. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -104,10 +125,10 @@ function Register() {
             />
           </div>
 
-          <button type="submit" style={{ width: '100%', padding: '14px', backgroundColor: '#1FA89A', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.1em', fontWeight: '600', cursor: 'pointer', transition: 'background 0.3s', marginBottom: '1em' }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#1a9184'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#1FA89A'}>
-            Create Account
+          <button type="submit" disabled={loading} style={{ width: '100%', padding: '14px', backgroundColor: loading ? '#ccc' : '#1FA89A', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.1em', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.3s', marginBottom: '1em' }}
+            onMouseOver={(e) => !loading && (e.target.style.backgroundColor = '#1a9184')}
+            onMouseOut={(e) => !loading && (e.target.style.backgroundColor = '#1FA89A')}>
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
 
           <div style={{ textAlign: 'center' }}>

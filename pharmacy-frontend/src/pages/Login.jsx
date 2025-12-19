@@ -7,6 +7,7 @@ function Login() {
     email: "",
     password: ""
   });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -14,14 +15,37 @@ function Login() {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (loginData.email.trim() === "admin@pharmacy.com" && loginData.password.trim() === "admin") {
-      login({ email: loginData.email, role: 'admin' });
-      navigate("/admin");
-    } else {
-      login({ email: loginData.email, role: 'user' });
-      navigate("/medicines");
+    setLoading(true);
+    
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData)
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        login(data.user);
+        
+        if (data.user.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/medicines');
+        }
+      } else {
+        alert(data.message || 'Login failed');
+      }
+    } catch (error) {
+      alert('Network error. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,10 +92,10 @@ function Login() {
             <Link to="/forgot-password" style={{ color: '#2BBBAD', textDecoration: 'none', fontSize: '0.9em', fontWeight: '500' }}>Forgot Password?</Link>
           </div>
 
-          <button type="submit" style={{ width: '100%', padding: '14px', backgroundColor: '#1FA89A', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.1em', fontWeight: '600', cursor: 'pointer', transition: 'background 0.3s', marginBottom: '1em' }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#1a9184'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#1FA89A'}>
-            Login
+          <button type="submit" disabled={loading} style={{ width: '100%', padding: '14px', backgroundColor: loading ? '#ccc' : '#1FA89A', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.1em', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.3s', marginBottom: '1em' }}
+            onMouseOver={(e) => !loading && (e.target.style.backgroundColor = '#1a9184')}
+            onMouseOut={(e) => !loading && (e.target.style.backgroundColor = '#1FA89A')}>
+            {loading ? 'Logging in...' : 'Login'}
           </button>
 
           <div style={{ textAlign: 'center', padding: '1em 0', borderTop: '1px solid #e0e0e0' }}>

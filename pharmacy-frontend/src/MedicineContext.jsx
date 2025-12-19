@@ -52,14 +52,12 @@ export const MedicineProvider = ({ children }) => {
 
   const fetchMedicines = async () => {
     try {
-      const data = await api.get('/medicines');
-      setMedicines(data);
-    } catch (error) {
-      console.error('Error fetching medicines:', error);
-      // Fallback to hardcoded data if API fails
+      setLoading(true);
+      // Use hardcoded medicine data directly
+      console.log('Loading hardcoded medicine data');
       setMedicines([
     // Pain Relief
-    { id: 1, name: "Paracetamol", dosage: "650mg", brand: "Dolo", price: 20, rating: 4.5, purpose: "Pain relief and fever reduction", category: "Pain Relief", image: "https://tiimg.tistatic.com/fp/1/007/442/paracetamol-dolo-650-mg-tablets--885.jpg", description: "Paracetamol is a widely used over-the-counter pain reliever and fever reducer. It is effective for treating mild to moderate pain and reducing fever.", usage: "Take 1-2 tablets every 4-6 hours as needed. Do not exceed 8 tablets in 24 hours. Take with or without food.", ingredients: "Paracetamol 650mg, Microcrystalline cellulose, Starch, Magnesium stearate" },
+    { id: 1, name: "Paracetamol", dosage: "650mg", brand: "Dolo", price: 20, rating: 4.5, purpose: "Pain relief and fever reduction", category: "Pain Relief", image: "https://5.imimg.com/data5/SELLER/Default/2023/2/NS/KK/TJ/11196735/dolo-500-1675673410537-1000x1000.jpg", description: "Paracetamol is a widely used over-the-counter pain reliever and fever reducer. It is effective for treating mild to moderate pain and reducing fever.", usage: "Take 1-2 tablets every 4-6 hours as needed. Do not exceed 8 tablets in 24 hours. Take with or without food.", ingredients: "Paracetamol 650mg, Microcrystalline cellulose, Starch, Magnesium stearate" },
     { id: 4, name: "Ibuprofen", dosage: "400mg", brand: "Brufen", price: 15, rating: 4.3, purpose: "Anti-inflammatory and pain relief", category: "Pain Relief", image: "https://5.imimg.com/data5/SELLER/Default/2024/7/438682358/MA/IB/IW/10526113/brufen-400mg-ibuprofen-tablets-500x500.png", description: "Ibuprofen is a nonsteroidal anti-inflammatory drug (NSAID) used to reduce inflammation, pain, and fever.", usage: "Take 1 tablet every 6-8 hours with food. Do not exceed 3 tablets in 24 hours.", ingredients: "Ibuprofen 400mg, Lactose, Corn starch, Colloidal silicon dioxide" },
     { id: 5, name: "Aspirin", dosage: "75mg", brand: "Disprin", price: 10, rating: 4.1, purpose: "Pain relief and blood thinning", category: "Pain Relief", image: "https://tse1.mm.bing.net/th/id/OIP.OTuWUEhB5n7jmm6sSMWfrAHaHa?pid=Api&P=0&h=180", description: "Low-dose aspirin used for pain relief and cardiovascular protection through blood thinning properties.", usage: "Take 1 tablet daily with food. For pain relief, take as needed every 4-6 hours.", ingredients: "Aspirin 75mg, Microcrystalline cellulose, Corn starch, Talc" },
     { id: 21, name: "Diclofenac", dosage: "50mg", brand: "Voveran", price: 25, rating: 4.2, purpose: "Anti-inflammatory pain relief", category: "Pain Relief", image: "https://tse1.mm.bing.net/th/id/OIP.uyoh4rxH-Q3H0AhFo4GNLwHaEv?pid=Api&P=0&h=180" },
@@ -90,25 +88,22 @@ export const MedicineProvider = ({ children }) => {
     { id: 38, name: "Atorvastatin", dosage: "20mg", brand: "Lipitor", price: 50, rating: 4.4, purpose: "Lowers cholesterol levels", category: "Chronic Care", image: "https://medihub.pk/wp-content/uploads/2022/10/LIPITOR-TAB-20-MG-10S.webp" },
     { id: 39, name: "Amlodipine", dosage: "5mg", brand: "Norvasc", price: 40, rating: 4.3, purpose: "Treats high blood pressure", category: "Chronic Care", image: "https://www.assetpharmacy.com/wp-content/uploads/2017/09/Norvasc-5mg-Amlodipine-5mg-Tablets-30-Tablets.jpg" },
     { id: 40, name: "Glimepiride", dosage: "2mg", brand: "Amaryl", price: 55, rating: 4.2, purpose: "Controls blood sugar in diabetes", category: "Chronic Care", image: "https://5.imimg.com/data5/SELLER/Default/2023/11/361725384/QK/GG/BS/27213454/amaryl-glimepiride-tablets-2mg-1000x1000.jpg" },
-    { id: 12, name: "Levothyroxine", dosage: "100mcg", brand: "Synthroid", price: 45, rating: 4.6, purpose: "Treats underactive thyroid", category: "Chronic Care", image: "https://5.imimg.com/data5/SELLER/Default/2025/2/485998957/OH/FK/MZ/210259366/synthroid-levothyroxine-tablets-500x500.jpg" },
-
 
     // Respiratory
-    { id: 2, name: "Cough Syrup", dosage: "100ml", brand: "Benadryl", price: 80, rating: 4.2, purpose: "Treats cough and throat irritation", category: "Respiratory", image: "https://www.practostatic.com/practopedia-images/v3/res-750/benadryl-cough-formula-cold-cough-150ml_48475b31-815b-4164-bf51-ca14c5d2cdfd.JPG" },
-    { id: 7, name: "Cetirizine", dosage: "10mg", brand: "Zyrtec", price: 25, rating: 4.4, purpose: "Antihistamine for allergies", category: "Respiratory", image: "https://tse1.mm.bing.net/th/id/OIP.bZdsfz-EkxQw5Cc1dMh7WgHaFS?pid=Api&P=0&h=180" },
-    { id: 13, name: "Albuterol Inhaler", dosage: "200mcg", brand: "Ventolin", price: 200, rating: 4.8, purpose: "Treats asthma and breathing problems", category: "Respiratory", image: "https://tse2.mm.bing.net/th/id/OIP.8o9ihd_ge-M7QY2L5u18NgHaH5?pid=Api&P=0&h=180" },
-    { id: 71, name: "Montelukast", dosage: "10mg", brand: "Montair", price: 95, rating: 4.3, purpose: "Prevents asthma attacks", category: "Respiratory", image: "https://tse1.mm.bing.net/th/id/OIP.nrFaBsLi8COqPccE0w1k5gHaEv?pid=Api&P=0&h=180" },
-    { id: 72, name: "Loratadine", dosage: "10mg", brand: "Claritin", price: 60, rating: 4.4, purpose: "Relieves allergy symptoms", category: "Respiratory", image: "https://tse3.mm.bing.net/th/id/OIP.YxSuyoPrATmvd0nQnR6pbgHaEK?pid=Api&P=0&h=180" },
-    { id: 73, name: "Salbutamol Syrup", dosage: "100ml", brand: "Asthalin", price: 75, rating: 4.2, purpose: "Relieves bronchospasm", category: "Respiratory", image: "https://sukitha.com/wp-content/uploads/2021/01/ast0005.jpg" },
+    { id: 41, name: "Salbutamol", dosage: "100mcg", brand: "Asthalin", price: 85, rating: 4.5, purpose: "Asthma and breathing problems", category: "Respiratory", image: "https://5.imimg.com/data5/SELLER/Default/2021/8/YE/DH/GH/6498690/asthalin-inhaler-100-mcg-1000x1000.jpg" },
+    { id: 42, name: "Montelukast", dosage: "10mg", brand: "Montair", price: 120, rating: 4.4, purpose: "Asthma and allergy prevention", category: "Respiratory", image: "https://5.imimg.com/data5/SELLER/Default/2023/2/288088969/YF/TE/WH/6498690/montair-10-mg-tablet-1000x1000.jpg" },
+    { id: 43, name: "Cetirizine", dosage: "10mg", brand: "Zyrtec", price: 45, rating: 4.3, purpose: "Allergy relief", category: "Respiratory", image: "https://5.imimg.com/data5/SELLER/Default/2023/8/338088969/YF/TE/WH/6498690/zyrtec-10-mg-tablet-1000x1000.jpg" },
 
     // Digestive
-    { id: 8, name: "Omeprazole", dosage: "20mg", brand: "Prilosec", price: 40, rating: 4.5, purpose: "Reduces stomach acid production", category: "Digestive", image: "https://tse2.mm.bing.net/th/id/OIP.4oavfR8Ekv-GfMPbSsTa8gHaHa?pid=Api&P=0&h=180" },
-    { id: 74, name: "Probiotics", dosage: "1 capsule", brand: "Enterogermina", price: 150, rating: 4.6, purpose: "Restores gut bacteria balance", category: "Digestive", image: "https://www.binsina.ae/media/catalog/product/m/52288_1.jpg?optimize=medium&bg-color=255,255,255&fit=bounds&height=600&width=600&canvas=600:600" },
-    { id: 75, name: "Loperamide", dosage: "2mg", brand: "Imodium", price: 35, rating: 4.2, purpose: "Treats diarrhea", category: "Digestive", image: "https://www.xalmeds.com/cdn/shop/files/IMG_7050.jpg?v=1698939146" },
-    { id: 76, name: "Antacid", dosage: "10ml", brand: "ENO", price: 25, rating: 4.1, purpose: "Relieves acidity and heartburn", category: "Digestive", image: "https://weshine.ca/wp-content/uploads/2021/10/06081500728-600x600.png" },
-    { id: 77, name: "Ranitidine", dosage: "150mg", brand: "Aciloc", price: 50, rating: 4.3, purpose: "Reduces stomach acid", category: "Digestive", image: "https://5.imimg.com/data5/SELLER/Default/2024/11/466536958/OP/KH/ZX/233772675/ranitidine-aciloc-150-mg-tablets-1000x1000.jpg" },
-        { id: 78, name: "Simethicone", dosage: "40mg", brand: "Gas-X", price: 30, rating: 4.0, purpose: "Relieves gas and bloating", category: "Digestive", image: "https://i5.walmartimages.com/asr/489c4c71-252d-4183-aaf5-4a0efe1a641b.e3e89ac112f8c5a6443e4ec4b3a6bbd8.jpeg" }
+    { id: 44, name: "Omeprazole", dosage: "20mg", brand: "Prilosec", price: 65, rating: 4.6, purpose: "Reduces stomach acid", category: "Digestive", image: "https://5.imimg.com/data5/SELLER/Default/2023/5/308088969/YF/TE/WH/6498690/prilosec-20-mg-capsule-1000x1000.jpg" },
+    { id: 45, name: "Loperamide", dosage: "2mg", brand: "Imodium", price: 55, rating: 4.2, purpose: "Treats diarrhea", category: "Digestive", image: "https://5.imimg.com/data5/SELLER/Default/2023/7/328088969/YF/TE/WH/6498690/imodium-2-mg-capsule-1000x1000.jpg" },
+
+    // Women's Health
+    { id: 46, name: "Iron Tablets", dosage: "65mg", brand: "Feroglobin", price: 95, rating: 4.4, purpose: "Iron deficiency anemia", category: "Women's Health", image: "https://5.imimg.com/data5/SELLER/Default/2023/9/348088969/YF/TE/WH/6498690/feroglobin-65-mg-tablet-1000x1000.jpg" },
+    { id: 47, name: "Folic Acid", dosage: "5mg", brand: "Folvite", price: 40, rating: 4.5, purpose: "Pregnancy and anemia support", category: "Women's Health", image: "https://5.imimg.com/data5/SELLER/Default/2023/6/318088969/YF/TE/WH/6498690/folvite-5-mg-tablet-1000x1000.jpg" }
       ]);
+    } catch (error) {
+      console.error('Error loading medicines:', error);
     } finally {
       setLoading(false);
     }
